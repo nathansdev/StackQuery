@@ -23,11 +23,6 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
         mMvpView = null;
     }
 
-    @Override
-    public void setUserAsLoggedOut() {
-
-    }
-
     private boolean isViewAttached() {
         return mMvpView != null;
     }

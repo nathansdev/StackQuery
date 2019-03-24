@@ -1,9 +1,9 @@
 package com.nathansdev.stack.base;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
@@ -11,14 +11,12 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasFragmentInjector;
-import timber.log.Timber;
+import dagger.android.support.HasSupportFragmentInjector;
 
 /**
  * Base activity class for other activities.
  */
-
-public abstract class BaseActivity extends AppCompatActivity implements HasFragmentInjector, MvpView {
+public abstract class BaseActivity extends AppCompatActivity implements HasSupportFragmentInjector, MvpView {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
@@ -30,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity implements HasFragm
     }
 
     @Override
-    public AndroidInjector<Fragment> fragmentInjector() {
+    public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentInjector;
     }
 
@@ -64,36 +62,11 @@ public abstract class BaseActivity extends AppCompatActivity implements HasFragm
 
     }
 
-    @Override
-    public boolean isNetworkConnected() {
-        return false;
-    }
-
-    @Override
-    public void openActivityOnTokenExpire() {
-
-    }
-
     /**
      * Hide soft keyboard.
      */
     public void hideKeyboard() {
 
-    }
-
-    @Override
-    public void showSessionExpired() {
-
-    }
-
-    @Override
-    public boolean isSessionExpired() {
-        return false;
-    }
-
-    @Override
-    public void onServerDownError(int errorCode) {
-        Timber.d("server down error");
     }
 }
 

@@ -1,16 +1,16 @@
 package com.nathansdev.stack.base;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import butterknife.Unbinder;
-import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Base fragment class that any fragment can extends.
@@ -32,7 +32,7 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     @Override
     public void onAttach(Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            AndroidInjection.inject(this);
+            AndroidSupportInjection.inject(this);
         }
         if (activity instanceof BaseActivity) {
             this.mActivity = (BaseActivity) activity;
@@ -43,7 +43,7 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     @Override
     public void onAttach(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            AndroidInjection.inject(this);
+            AndroidSupportInjection.inject(this);
         }
         if (context instanceof BaseActivity) {
             this.mActivity = (BaseActivity) context;
@@ -105,33 +105,8 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     }
 
     @Override
-    public boolean isNetworkConnected() {
-        return false;
-    }
-
-    @Override
     public void hideKeyboard() {
 
-    }
-
-    @Override
-    public void openActivityOnTokenExpire() {
-
-    }
-
-    @Override
-    public boolean isSessionExpired() {
-        return false;
-    }
-
-    @Override
-    public void showSessionExpired() {
-
-    }
-
-    @Override
-    public void onServerDownError(int errorCode) {
-        mActivity.onServerDownError(errorCode);
     }
 
     protected abstract void setUpView(View view);

@@ -23,13 +23,4 @@ public interface MvpView {
     void showMessage(@StringRes int resId);
 
     void hideKeyboard();
-
-    boolean isNetworkConnected();
-
-    void showSessionExpired();
-
-    boolean isSessionExpired();
-
-    void onServerDownError(int errorCode);
-
 }
