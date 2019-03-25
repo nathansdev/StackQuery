@@ -5,12 +5,14 @@ import android.app.Application;
 import android.content.Context;
 
 import com.nathansdev.stack.di.DaggerAppComponent;
+import com.nathansdev.stack.log.TimberThreadDebugTree;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import timber.log.Timber;
 
 public class StackAndroidApp extends Application implements HasActivityInjector {
     @Inject
@@ -24,6 +26,7 @@ public class StackAndroidApp extends Application implements HasActivityInjector 
                 .application(this)
                 .build()
                 .inject(this);
+        Timber.plant(new TimberThreadDebugTree());
     }
 
     @Override
