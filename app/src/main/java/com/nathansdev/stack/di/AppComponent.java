@@ -2,7 +2,7 @@ package com.nathansdev.stack.di;
 
 import android.app.Application;
 
-import com.nathansdev.stack.StackAndroidApp;
+import com.nathansdev.stack.StackQueryApp;
 
 import javax.inject.Singleton;
 
@@ -30,5 +30,5 @@ public interface AppComponent {
 
     }
 
-    void inject(StackAndroidApp app);
+    void inject(StackQueryApp app);
 }
