@@ -36,10 +36,10 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
      * @param weekLyFeedFragment      feed type weekly instance.
      * @param selfFragment            feed type self instance.
      */
-    public HomePagerAdapter(FragmentManager fm, InterestingFeedFragment interestingFeedFragment,
-                            FeaturedFeedFragment featuredFeedFragment, HotFeedFragment hotFeedFragment,
-                            MonthLyFeedFragment monthLyFeedFragment, WeekLyFeedFragment weekLyFeedFragment,
-                            SelfFragment selfFragment, String[] names) {
+    HomePagerAdapter(FragmentManager fm, InterestingFeedFragment interestingFeedFragment,
+                     FeaturedFeedFragment featuredFeedFragment, HotFeedFragment hotFeedFragment,
+                     MonthLyFeedFragment monthLyFeedFragment, WeekLyFeedFragment weekLyFeedFragment,
+                     SelfFragment selfFragment, String[] names) {
         super(fm);
         this.interestingFeedFragment = interestingFeedFragment;
         this.featuredFeedFragment = featuredFeedFragment;
