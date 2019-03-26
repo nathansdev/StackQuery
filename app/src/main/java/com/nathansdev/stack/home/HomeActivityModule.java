@@ -3,12 +3,12 @@ package com.nathansdev.stack.home;
 
 import com.nathansdev.stack.di.PerActivity;
 import com.nathansdev.stack.di.PerFragment;
+import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.FeedView;
 import com.nathansdev.stack.home.feed.FeedViewPresenter;
 import com.nathansdev.stack.home.feed.FeedViewPresenterImpl;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
-import com.nathansdev.stack.home.feed.InterestingFeedFragment;
 import com.nathansdev.stack.home.feed.MonthLyFeedFragment;
 import com.nathansdev.stack.home.feed.SelfFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
@@ -24,7 +24,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class HomeActivityModule {
     @PerFragment
     @ContributesAndroidInjector
-    abstract InterestingFeedFragment provideInterestingFeedFragmentFactory();
+    abstract ActivityFeedFragment provideInterestingFeedFragmentFactory();
 
     @PerFragment
     @ContributesAndroidInjector

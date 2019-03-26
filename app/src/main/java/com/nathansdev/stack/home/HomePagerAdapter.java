@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.nathansdev.stack.TaggedFragmentStatePagerAdapter;
+import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
-import com.nathansdev.stack.home.feed.InterestingFeedFragment;
 import com.nathansdev.stack.home.feed.MonthLyFeedFragment;
 import com.nathansdev.stack.home.feed.SelfFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
@@ -19,7 +19,7 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
     private static final String TAG = HomePagerAdapter.class.getSimpleName();
     private final FeaturedFeedFragment featuredFeedFragment;
     private final HotFeedFragment hotFeedFragment;
-    private final InterestingFeedFragment interestingFeedFragment;
+    private final ActivityFeedFragment interestingFeedFragment;
     private final MonthLyFeedFragment monthLyFeedFragment;
     private final WeekLyFeedFragment weekLyFeedFragment;
     private final SelfFragment selfFragment;
@@ -36,7 +36,7 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
      * @param weekLyFeedFragment      feed type weekly instance.
      * @param selfFragment            feed type self instance.
      */
-    HomePagerAdapter(FragmentManager fm, InterestingFeedFragment interestingFeedFragment,
+    HomePagerAdapter(FragmentManager fm, ActivityFeedFragment interestingFeedFragment,
                      FeaturedFeedFragment featuredFeedFragment, HotFeedFragment hotFeedFragment,
                      MonthLyFeedFragment monthLyFeedFragment, WeekLyFeedFragment weekLyFeedFragment,
                      SelfFragment selfFragment, String[] names) {

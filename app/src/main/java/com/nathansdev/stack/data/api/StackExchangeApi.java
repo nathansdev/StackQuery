@@ -14,16 +14,21 @@ public interface StackExchangeApi {
     String SORT = "sort";
     String SITE = "site";
     String ORDER = "order";
+    String PAGE = "page";
+    String PAGE_SIZE = "pagesize";
 
     @GET(API_V1_QUESTIONS_JSON)
     Observable<QuestionsResponse> getQuestionsRx(@Query(SORT) String sort, @Query(SITE) String site,
-                                                 @Query(ORDER) String order);
+                                                 @Query(ORDER) String order, @Query(PAGE) String page,
+                                                 @Query(PAGE_SIZE) String size);
 
     @GET(API_V1_QUESTIONS_JSON)
     Flowable<QuestionsResponse> getQuestionsFlowable(@Query(SORT) String sort, @Query(SITE) String site,
-                                                     @Query(ORDER) String order);
+                                                     @Query(ORDER) String order, @Query(PAGE) long page,
+                                                     @Query(PAGE_SIZE) long size);
 
     @GET(API_V1_QUESTIONS_JSON)
     Call<QuestionsResponse> getQuestions(@Query(SORT) String sort, @Query(SITE) String site,
-                                         @Query(ORDER) String order);
+                                         @Query(ORDER) String order, @Query(PAGE) String page,
+                                         @Query(PAGE_SIZE) String size);
 }

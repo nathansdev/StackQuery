@@ -6,15 +6,15 @@ import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 
 import javax.inject.Inject;
 
-public class InterestingFeedFragment extends FeedFragment {
+public class ActivityFeedFragment extends FeedFragment {
 
     @Inject
-    public InterestingFeedFragment() {
+    public ActivityFeedFragment() {
 
     }
 
-    public static InterestingFeedFragment newInstance() {
-        InterestingFeedFragment fragment = new InterestingFeedFragment();
+    public static ActivityFeedFragment newInstance() {
+        ActivityFeedFragment fragment = new ActivityFeedFragment();
         return fragment;
     }
 
@@ -33,13 +33,4 @@ public class InterestingFeedFragment extends FeedFragment {
         return null;
     }
 
-    @Override
-    protected void setRefreshLayout(boolean refresh) {
-
-    }
-
-    @Override
-    public void onQuestionsLoaded() {
-
-    }
 }

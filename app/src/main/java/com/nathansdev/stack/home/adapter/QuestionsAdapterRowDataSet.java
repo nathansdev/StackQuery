@@ -131,4 +131,34 @@ public class QuestionsAdapterRowDataSet extends SortedListAdapterCallback<Questi
             sortedList.removeItemAt(index);
         }
     }
+
+    /**
+     * Remove load more row from sorted list.
+     */
+    public void removeLoading() {
+        int index = -1;
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (sortedList.get(i).isTypeLoading()) {
+                index = i;
+            }
+        }
+        if (index > -1) {
+            sortedList.removeItemAt(index);
+        }
+    }
+
+    /**
+     * Remove load more row from sorted list.
+     */
+    public void removeError() {
+        int index = -1;
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (sortedList.get(i).isTypeError()) {
+                index = i;
+            }
+        }
+        if (index > -1) {
+            sortedList.removeItemAt(index);
+        }
+    }
 }

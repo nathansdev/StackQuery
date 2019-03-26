@@ -3,9 +3,14 @@
     <color name="colorPrimary">#fafafa</color>
     <color name="colorPrimaryDark">#f5f5f5</color>
     <color name="colorAccent">#ff9100</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="white_50">#fafafa</color>
     <color name="white_100">#f5f5f5</color>
     <color name="orange">#ff9100</color>
+    <color name="light_grey">#CDCDCD</color>
+    <color name="dark_grey">#A9A9A9</color>
+    <color name="grey">#808080</color>
+    <color name="white">#ffffff</color>
+    <color name="white_50">#B3ffffff</color>
+    <color name="white_40">#66ffffff</color>
+    <color name="white_30">#4Dffffff</color>
+    <color name="black">#000000</color>
 </resources>

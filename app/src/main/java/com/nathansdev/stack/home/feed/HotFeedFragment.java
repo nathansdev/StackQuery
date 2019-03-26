@@ -20,7 +20,7 @@ public class HotFeedFragment extends FeedFragment {
 
     @Override
     protected void setUpView(View view) {
-        super.setUpView(view);
+//        super.setUpView(view);
     }
 
     @Override
@@ -31,15 +31,5 @@ public class HotFeedFragment extends FeedFragment {
     @Override
     protected QuestionsAdapter getAdapter() {
         return null;
-    }
-
-    @Override
-    protected void setRefreshLayout(boolean refresh) {
-
-    }
-
-    @Override
-    public void onQuestionsLoaded() {
-
     }
 }

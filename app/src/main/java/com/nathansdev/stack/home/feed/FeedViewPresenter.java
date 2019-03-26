@@ -5,7 +5,7 @@ import com.nathansdev.stack.base.MvpView;
 import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 
 public interface FeedViewPresenter<V extends MvpView> extends MvpPresenter<V> {
-    void init(QuestionsAdapterRowDataSet dataset);
+    void init(QuestionsAdapterRowDataSet dataset, String filterType);
 
     void loadQuestions();
 

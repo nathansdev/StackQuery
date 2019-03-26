@@ -19,8 +19,9 @@ import butterknife.ButterKnife;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionsAdapterVH> {
     private static final int VIEW_TYPE_QUESTION = 0x01;
-    private static final int VIEW_TYPE_LOADING = 0x02;
-    private static final int VIEW_TYPE_LOADMORE = 0x03;
+    private static final int VIEW_TYPE_LOADMORE = 0x02;
+    private static final int VIEW_TYPE_LOADING = 0x03;
+    private static final int VIEW_TYPE_ERROR = 0x04;
 
     private RxEventBus eventBus;
     private ArrayList<QuestionsAdapterVH> viewHolders = new ArrayList<>();
@@ -36,6 +37,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
                 break;
             case VIEW_TYPE_LOADMORE:
                 holder = QuestionsAdapterVH.ofLoadMore(parent);
+                break;
+            case VIEW_TYPE_LOADING:
+                holder = QuestionsAdapterVH.ofLoading(parent);
+                break;
+            case VIEW_TYPE_ERROR:
+                holder = QuestionsAdapterVH.ofError(parent);
                 break;
             default:
                 break;
@@ -63,6 +70,10 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
             return VIEW_TYPE_QUESTION;
         } else if (row.isTypeLoadMore()) {
             return VIEW_TYPE_LOADMORE;
+        } else if (row.isTypeLoading()) {
+            return VIEW_TYPE_LOADING;
+        } else if (row.isTypeError()) {
+            return VIEW_TYPE_ERROR;
         }
         return RecyclerView.NO_POSITION;
     }
@@ -113,6 +124,13 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
             return LoadMoreVH.create(parent);
         }
 
+        static QuestionsAdapterVH ofError(ViewGroup parent) {
+            return ErrorVH.create(parent);
+        }
+
+        static QuestionsAdapterVH ofLoading(ViewGroup parent) {
+            return LoadingVH.create(parent);
+        }
         abstract void bind(QuestionsAdapterRow row, RxEventBus eventBus);
 
         abstract void destroy();
@@ -194,6 +212,84 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
             View rootView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.adapter_item_load_more, parent, false);
             return new LoadMoreVH(rootView);
+        }
+
+        @Override
+        void bind(QuestionsAdapterRow row, final RxEventBus eventBus) {
+
+        }
+
+        @Override
+        void destroy() {
+
+        }
+    }
+
+
+    /**
+     * Binds groups name and avatar in the list.
+     */
+    public static class LoadingVH extends QuestionsAdapterVH {
+
+        /**
+         * Initialize constructor with item view.
+         *
+         * @param itemView item view / row view.
+         */
+        LoadingVH(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        /**
+         * Inflate the user skillLayout to view.
+         *
+         * @param parent view group.
+         * @return users view holder.
+         */
+        public static LoadingVH create(ViewGroup parent) {
+            View rootView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.adapter_item_loading, parent, false);
+            return new LoadingVH(rootView);
+        }
+
+        @Override
+        void bind(QuestionsAdapterRow row, final RxEventBus eventBus) {
+
+        }
+
+        @Override
+        void destroy() {
+
+        }
+    }
+
+
+    /**
+     * Binds groups name and avatar in the list.
+     */
+    public static class ErrorVH extends QuestionsAdapterVH {
+
+        /**
+         * Initialize constructor with item view.
+         *
+         * @param itemView item view / row view.
+         */
+        ErrorVH(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        /**
+         * Inflate the user skillLayout to view.
+         *
+         * @param parent view group.
+         * @return users view holder.
+         */
+        public static ErrorVH create(ViewGroup parent) {
+            View rootView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.adapter_item_error, parent, false);
+            return new ErrorVH(rootView);
         }
 
         @Override

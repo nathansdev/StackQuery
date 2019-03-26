@@ -11,6 +11,7 @@ public abstract class QuestionsAdapterRow implements Parcelable {
     private static final int TYPE_QUESTION = 0x01;
     private static final int TYPE_LOAD_MORE = 0x02;
     private static final int TYPE_LOADING = 0x03;
+    private static final int TYPE_ERROR = 0x04;
 
     /**
      * Builds along with already built row.
@@ -40,6 +41,10 @@ public abstract class QuestionsAdapterRow implements Parcelable {
         return type() == TYPE_LOADING;
     }
 
+    public boolean isTypeError() {
+        return type() == TYPE_ERROR;
+    }
+
     public static Builder builder() {
         return new AutoValue_QuestionsAdapterRow.Builder();
     }
@@ -48,6 +53,18 @@ public abstract class QuestionsAdapterRow implements Parcelable {
         return builder().type(TYPE_QUESTION).imageUrl(question.owner().image()).question(question)
                 .name(question.owner().name()).timeStamp(question.updatedAt())
                 .title(question.title()).votes(question.score()).build();
+    }
+
+    public static QuestionsAdapterRow ofLoading() {
+        return builder().type(TYPE_LOADING).build();
+    }
+
+    public static QuestionsAdapterRow ofLoadMore() {
+        return builder().type(TYPE_LOAD_MORE).build();
+    }
+
+    public static QuestionsAdapterRow ofError() {
+        return builder().type(TYPE_ERROR).build();
     }
 
     /**
@@ -60,6 +77,10 @@ public abstract class QuestionsAdapterRow implements Parcelable {
     public int compare(QuestionsAdapterRow r2) {
         int comparedValue = 1;
         if (this.isTypeLoadMore() && r2.isTypeLoadMore()) {
+            return 0;
+        } else if (this.isTypeLoading() && r2.isTypeLoading()) {
+            return 0;
+        } else if (this.isTypeError() && r2.isTypeError()) {
             return 0;
         } else if (this.isTypeQuestion() && r2.isTypeQuestion()) {
             return 1;
@@ -82,6 +103,10 @@ public abstract class QuestionsAdapterRow implements Parcelable {
             return this.question().equals(newItem.question());
         } else if (isTypeLoadMore() && newItem.isTypeLoadMore()) {
             return this.equals(newItem);
+        } else if (isTypeLoading() && newItem.isTypeLoading()) {
+            return this.equals(newItem);
+        } else if (isTypeError() && newItem.isTypeError()) {
+            return this.equals(newItem);
         }
         return false;
     }
@@ -96,6 +121,10 @@ public abstract class QuestionsAdapterRow implements Parcelable {
         if (isTypeQuestion() && newItem.isTypeQuestion()) {
             return this.question().id().longValue() == newItem.question().id().longValue();
         } else if (isTypeLoadMore() && newItem.isTypeLoadMore()) {
+            return true;
+        } else if (isTypeLoading() && newItem.isTypeLoading()) {
+            return true;
+        } else if (isTypeError() && newItem.isTypeError()) {
             return true;
         }
         return false;

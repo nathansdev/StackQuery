@@ -18,6 +18,7 @@
             android:fitsSystemWindows="true"
             app:title="@string/all_questions"
             app:titleTextColor="@color/black"
+            app:titleMarginStart="@dimen/super_large_text"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -28,12 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
+            android:minHeight="?actionBarSize"
             app:tabIndicatorColor="@color/orange"
             app:tabIndicatorHeight="4dp"
-            app:tabSelectedTextColor="@color/black"
+            app:tabMode="scrollable"
             app:tabTextAppearance="?android:attr/textAppearanceSmall"
             app:tabTextColor="@color/black"
-            app:tabMode="fixed" />
+            app:tabSelectedTextColor="@color/orange" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
