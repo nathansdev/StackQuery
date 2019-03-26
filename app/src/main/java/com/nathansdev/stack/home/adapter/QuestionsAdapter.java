@@ -2,6 +2,7 @@ package com.nathansdev.stack.home.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nathansdev.stack.R;
+import com.nathansdev.stack.rxevent.AppEvents;
 import com.nathansdev.stack.rxevent.RxEventBus;
 import com.nathansdev.stack.utils.Utils;
+import com.nathansdev.stack.view.TagView;
 
 import java.util.ArrayList;
 
@@ -150,6 +153,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
         TextView title;
         @BindView(R.id.iv_owner_profile)
         ImageView avatar;
+        @BindView(R.id.flow_layout_tags)
+        ViewGroup tagsLayout;
 
         /**
          * Initialize constructor with item view.
@@ -175,10 +180,25 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
         @Override
         void bind(final QuestionsAdapterRow row, final RxEventBus eventBus) {
+            if (tagsLayout != null && tagsLayout.getChildCount() != 0) {
+                tagsLayout.removeAllViews();
+            }
             Utils.loadRoundImage(itemView.getContext(), row.imageUrl(), avatar);
             ownerName.setText(row.name());
             title.setText(row.title());
             timeStamp.setText(String.valueOf(row.timeStamp()));
+            if (row.question().tags() != null && !row.question().tags().isEmpty()) {
+                for (String tag : row.question().tags()) {
+                    TagView tagView = TagView.formView(tagsLayout, tag);
+                    tagView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            eventBus.send(new Pair<>(AppEvents.QUESTION_TAG_CLICKED, tag));
+                        }
+                    });
+                    tagsLayout.addView(tagView);
+                }
+            }
         }
 
         @Override

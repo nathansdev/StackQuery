@@ -32,5 +32,4 @@ public class ActivityFeedFragment extends FeedFragment {
     protected QuestionsAdapter getAdapter() {
         return null;
     }
-
 }

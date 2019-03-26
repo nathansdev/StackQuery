@@ -51,4 +51,10 @@
         android:text="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
         android:textSize="@dimen/large_text"
         app:layout_constraintTop_toBottomOf="@id/iv_owner_profile" />
+
+    <com.nathansdev.stack.view.FlowLayoutTags
+        android:id="@+id/flow_layout_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
 </android.support.constraint.ConstraintLayout>
