@@ -21,7 +21,7 @@ public abstract class Question implements Parcelable {
     public abstract String title();
 
     @Nullable
-    @Json(name = "Owner")
+    @Json(name = "owner")
     public abstract Owner owner();
 
     @Nullable
@@ -50,15 +50,15 @@ public abstract class Question implements Parcelable {
 
     @Nullable
     @Json(name = "last_activity_date")
-    public abstract String updatedAt();
+    public abstract Long updatedAt();
 
     @Nullable
     @Json(name = "creation_date")
-    public abstract String createdAt();
+    public abstract Long createdAt();
 
     @Nullable
     @Json(name = "last_edit_date")
-    public abstract String editedAt();
+    public abstract Long editedAt();
 
     @Nullable
     @Json(name = "tags")

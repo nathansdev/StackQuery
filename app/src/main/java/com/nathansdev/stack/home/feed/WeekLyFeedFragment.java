@@ -2,11 +2,11 @@ package com.nathansdev.stack.home.feed;
 
 import android.view.View;
 
-import com.nathansdev.stack.base.BaseFragment;
+import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 
 import javax.inject.Inject;
 
-public class WeekLyFeedFragment extends BaseFragment {
+public class WeekLyFeedFragment extends FeedFragment {
 
     @Inject
     public WeekLyFeedFragment() {
@@ -20,6 +20,16 @@ public class WeekLyFeedFragment extends BaseFragment {
 
     @Override
     protected void setUpView(View view) {
+//        super.setUpView(view);
+    }
 
+    @Override
+    protected void attachPresenter() {
+
+    }
+
+    @Override
+    protected QuestionsAdapter getAdapter() {
+        return null;
     }
 }

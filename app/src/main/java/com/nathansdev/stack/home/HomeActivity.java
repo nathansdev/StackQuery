@@ -8,11 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 
+import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.R;
 import com.nathansdev.stack.base.BaseActivity;
+import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
-import com.nathansdev.stack.home.feed.InterestingFeedFragment;
 import com.nathansdev.stack.home.feed.MonthLyFeedFragment;
 import com.nathansdev.stack.home.feed.SelfFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
@@ -47,7 +48,7 @@ public class HomeActivity extends BaseActivity {
     @Inject
     HotFeedFragment hotFeedFragment;
     @Inject
-    InterestingFeedFragment interestingFeedFragment;
+    ActivityFeedFragment activityFeedFragment;
     @Inject
     MonthLyFeedFragment monthLyFeedFragment;
     @Inject
@@ -101,7 +102,12 @@ public class HomeActivity extends BaseActivity {
      * Initializing view pager.
      */
     private void setUpViewPager() {
-        homePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), interestingFeedFragment,
+        activityFeedFragment.setArguments(getFilterArgBundle(AppConstants.ACTIVITY));
+        featuredFeedFragment.setArguments(getFilterArgBundle(AppConstants.VOTES));
+        hotFeedFragment.setArguments(getFilterArgBundle(AppConstants.HOT));
+        monthLyFeedFragment.setArguments(getFilterArgBundle(AppConstants.MONTH));
+        weekLyFeedFragment.setArguments(getFilterArgBundle(AppConstants.WEEK));
+        homePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), activityFeedFragment,
                 featuredFeedFragment, hotFeedFragment, monthLyFeedFragment, weekLyFeedFragment,
                 selfFragment, getResources().getStringArray(R.array.home_tabs));
         viewPager.setAdapter(homePagerAdapter);
@@ -123,6 +129,7 @@ public class HomeActivity extends BaseActivity {
 
         });
         tableLayout.setupWithViewPager(viewPager);
+        tableLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewPager.setCurrentItem(0);
     }
 
@@ -137,6 +144,13 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void handleProfileMenuClicked() {
+
+    }
+
+    private Bundle getFilterArgBundle(String filterType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.ARG_FILTER_TYPE, filterType);
+        return bundle;
     }
 
     @Override

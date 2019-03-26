@@ -7,4 +7,5 @@ package com.nathansdev.stack.rxevent;
 public final class AppEvents {
     // Splash Activity Events.
     public static final String PROFILE_MENU_CLICKED = "profileMenuClicked";
+    public static final String QUESTION_TAG_CLICKED = "questionTagClicked";
 }

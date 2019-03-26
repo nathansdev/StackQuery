@@ -11,17 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.R;
 import com.nathansdev.stack.base.BaseFragment;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRow;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 import com.nathansdev.stack.rxevent.RxEventBus;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
-public abstract class FeedFragment extends BaseFragment implements FeedView {
+public abstract class FeedFragment extends BaseFragment implements FeedView,
+        SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.feeds_recycler)
     RecyclerView recyclerView;
@@ -35,10 +40,16 @@ public abstract class FeedFragment extends BaseFragment implements FeedView {
 
     private LinearLayoutManager layoutManager;
     private QuestionsAdapter adapter;
-
+    private QuestionsAdapterRowDataSet dataset;
+    private int lastVisibleItem;
+    private boolean loadingMore = false;
+    private String filterType = "activity";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            filterType = getArguments().getString(AppConstants.ARG_FILTER_TYPE);
+        }
     }
 
     @Nullable
@@ -68,16 +79,72 @@ public abstract class FeedFragment extends BaseFragment implements FeedView {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItem > -1) {
+                    QuestionsAdapterRow row = dataset.get(lastVisibleItem);
+                    if (!loadingMore && row.isTypeLoadMore()) {
+                        loadingMore = true;
+                        loadNextPage();
+                    }
+                }
             }
         });
         adapter.setEventBus(eventBus);
-        presenter.init();
+        if (dataset == null) {
+            Timber.d("creating new data set");
+            dataset = QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
+        }
+        adapter.setData(dataset);
+        recyclerView.setAdapter(adapter);
+        refreshLayout.setOnRefreshListener(this);
+        presenter.init(dataset, filterType);
         presenter.loadQuestions();
+    }
+
+    @Override
+    public void showLoading() {
+        dataset.addRow(QuestionsAdapterRow.ofLoading());
+        setRefreshLayout(false);
+    }
+
+    @Override
+    public void hideLoading() {
+        loadingMore = false;
+        dataset.removeLoading();
+        setRefreshLayout(true);
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.loadQuestions();
+    }
+
+    @Override
+    public void onDestroyView() {
+        refreshLayout.setOnRefreshListener(null);
+        recyclerView.setOnScrollListener(null);
+        super.onDestroyView();
+    }
+
+    private void setRefreshLayout(boolean refresh) {
+        if (refreshLayout != null) {
+            refreshLayout.setRefreshing(refresh);
+        }
+    }
+
+    private void loadNextPage() {
+        Timber.d("loading next page");
+        presenter.loadNextPage();
+    }
+
+
+    @Override
+    public void onQuestionsLoaded() {
+        loadingMore = false;
     }
 
     protected abstract void attachPresenter();
 
     protected abstract QuestionsAdapter getAdapter();
 
-    protected abstract void setRefreshLayout(boolean refresh);
 }

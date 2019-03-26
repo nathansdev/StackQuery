@@ -6,21 +6,21 @@ import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 
 import javax.inject.Inject;
 
-public class HotFeedFragment extends FeedFragment {
+public class ActivityFeedFragment extends FeedFragment {
 
     @Inject
-    public HotFeedFragment() {
+    public ActivityFeedFragment() {
 
     }
 
-    public static HotFeedFragment newInstance() {
-        HotFeedFragment fragment = new HotFeedFragment();
+    public static ActivityFeedFragment newInstance() {
+        ActivityFeedFragment fragment = new ActivityFeedFragment();
         return fragment;
     }
 
     @Override
     protected void setUpView(View view) {
-//        super.setUpView(view);
+        super.setUpView(view);
     }
 
     @Override

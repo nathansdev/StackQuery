@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/iv_owner_profile"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/image"
+        android:foregroundGravity="center_horizontal"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+    <TextView
+        android:id="@+id/tv_owner_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:text="sssssssssssssssss"
+        android:textColor="@color/black"
+        android:textSize="@dimen/medium_text"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/iv_owner_profile"
+        app:layout_constraintTop_toTopOf="@id/iv_owner_profile" />
+
+    <TextView
+        android:id="@+id/tv_question_posted_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:text="8 min ago"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nano_text"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_owner_profile"
+        app:layout_constraintStart_toEndOf="@+id/iv_owner_profile" />
+
+    <TextView
+        android:id="@+id/tv_question_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+        android:textSize="@dimen/large_text"
+        app:layout_constraintTop_toBottomOf="@id/iv_owner_profile" />
+
+    <com.nathansdev.stack.view.FlowLayoutTags
+        android:id="@+id/flow_layout_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
+</android.support.constraint.ConstraintLayout>
