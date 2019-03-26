@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nathansdev.stack.home.adapter.QuestionsAdapter;
+
 import javax.inject.Inject;
 
 public class FeaturedFeedFragment extends FeedFragment {
@@ -29,6 +31,26 @@ public class FeaturedFeedFragment extends FeedFragment {
 
     @Override
     protected void setUpView(View view) {
+        super.setUpView(view);
+    }
+
+    @Override
+    protected void attachPresenter() {
+
+    }
+
+    @Override
+    protected QuestionsAdapter getAdapter() {
+        return new QuestionsAdapter();
+    }
+
+    @Override
+    protected void setRefreshLayout(boolean refresh) {
+
+    }
+
+    @Override
+    public void onQuestionsLoaded() {
 
     }
 }

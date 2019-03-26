@@ -2,6 +2,8 @@ package com.nathansdev.stack.home.feed;
 
 import android.view.View;
 
+import com.nathansdev.stack.home.adapter.QuestionsAdapter;
+
 import javax.inject.Inject;
 
 public class InterestingFeedFragment extends FeedFragment {
@@ -23,6 +25,21 @@ public class InterestingFeedFragment extends FeedFragment {
 
     @Override
     protected void attachPresenter() {
+
+    }
+
+    @Override
+    protected QuestionsAdapter getAdapter() {
+        return new QuestionsAdapter();
+    }
+
+    @Override
+    protected void setRefreshLayout(boolean refresh) {
+
+    }
+
+    @Override
+    public void onQuestionsLoaded() {
 
     }
 }

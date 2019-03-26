@@ -3,6 +3,7 @@ package com.nathansdev.stack.di;
 import android.app.Application;
 
 import com.nathansdev.stack.StackQueryApp;
+import com.squareup.moshi.Moshi;
 
 import javax.inject.Singleton;
 
@@ -15,7 +16,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
  */
 
 @Singleton
-@Component(modules = {AndroidSupportInjectionModule.class, AppModule.class, ActivityBuilderModule.class})
+@Component(modules = {AndroidSupportInjectionModule.class, AppModule.class, ApiModule.class, ActivityBuilderModule.class})
 public interface AppComponent {
 
     /**
@@ -31,4 +32,6 @@ public interface AppComponent {
     }
 
     void inject(StackQueryApp app);
+
+    Moshi moshi();
 }
