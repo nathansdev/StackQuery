@@ -10,6 +10,7 @@
 
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

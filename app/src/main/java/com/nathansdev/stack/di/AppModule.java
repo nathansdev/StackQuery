@@ -4,9 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.nathansdev.stack.AppPreferences;
-import com.nathansdev.stack.data.model.MyAdapterFactory;
 import com.nathansdev.stack.rxevent.RxEventBus;
-import com.squareup.moshi.Moshi;
 
 import javax.inject.Singleton;
 
