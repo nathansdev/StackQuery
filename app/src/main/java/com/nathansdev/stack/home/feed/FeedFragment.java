@@ -71,6 +71,8 @@ public abstract class FeedFragment extends BaseFragment implements FeedView {
             }
         });
         adapter.setEventBus(eventBus);
+        presenter.init();
+        presenter.loadQuestions();
     }
 
     protected abstract void attachPresenter();
