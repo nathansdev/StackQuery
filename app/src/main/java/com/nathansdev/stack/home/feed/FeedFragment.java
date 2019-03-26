@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import com.nathansdev.stack.R;
 import com.nathansdev.stack.base.BaseFragment;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 import com.nathansdev.stack.rxevent.RxEventBus;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public abstract class FeedFragment extends BaseFragment implements FeedView {
 
@@ -35,6 +37,7 @@ public abstract class FeedFragment extends BaseFragment implements FeedView {
 
     private LinearLayoutManager layoutManager;
     private QuestionsAdapter adapter;
+    private QuestionsAdapterRowDataSet dataset;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +74,13 @@ public abstract class FeedFragment extends BaseFragment implements FeedView {
             }
         });
         adapter.setEventBus(eventBus);
-        presenter.init();
+        if (dataset == null) {
+            Timber.d("creating new data set");
+            dataset = QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
+        }
+        adapter.setData(dataset);
+        recyclerView.setAdapter(adapter);
+        presenter.init(dataset);
         presenter.loadQuestions();
     }
 

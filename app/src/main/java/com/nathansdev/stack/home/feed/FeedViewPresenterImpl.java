@@ -2,10 +2,16 @@ package com.nathansdev.stack.home.feed;
 
 import com.nathansdev.stack.base.BasePresenter;
 import com.nathansdev.stack.data.api.StackExchangeApi;
+import com.nathansdev.stack.data.model.Question;
 import com.nathansdev.stack.data.model.QuestionsResponse;
 import com.nathansdev.stack.error.DisposableSubscriberCallbackWrapper;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRow;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 
 import org.reactivestreams.Publisher;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,6 +29,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     private StackExchangeApi api;
     private PublishProcessor<Long> questionsSubject = PublishProcessor.create();
     private CompositeDisposable disposables = new CompositeDisposable();
+    private QuestionsAdapterRowDataSet rowDataSet;
 
     @Inject
     FeedViewPresenterImpl(StackExchangeApi api) {
@@ -30,7 +37,8 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     }
 
     @Override
-    public void init() {
+    public void init(QuestionsAdapterRowDataSet dataset) {
+        this.rowDataSet = dataset;
         Disposable disposable = questionsSubject
                 .onBackpressureDrop()
                 .concatMap((Function<Long, Publisher<QuestionsResponse>>) page ->
@@ -39,8 +47,9 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
                 .subscribeWith(new DisposableSubscriberCallbackWrapper<QuestionsResponse>(getMvpView()) {
 
                     @Override
-                    protected void onNextAction(QuestionsResponse alertsAdapterRows) {
-                        Timber.d("alert rows %s", alertsAdapterRows);
+                    protected void onNextAction(QuestionsResponse response) {
+                        Timber.d("questions %s", response);
+                        handleQuestionResponse(response);
                     }
 
                     @Override
@@ -49,6 +58,16 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
                     }
                 });
         disposables.add(disposable);
+    }
+
+    private void handleQuestionResponse(QuestionsResponse response) {
+        List<QuestionsAdapterRow> rows = new ArrayList<>();
+        if (response != null && response.questions() != null && !response.questions().isEmpty()) {
+            for (Question question : response.questions()) {
+                rows.add(QuestionsAdapterRow.ofQuestion(question));
+            }
+        }
+        rowDataSet.addAllRows(rows);
     }
 
     @Override

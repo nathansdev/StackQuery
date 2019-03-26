@@ -2,11 +2,11 @@ package com.nathansdev.stack.home.feed;
 
 import android.view.View;
 
-import com.nathansdev.stack.base.BaseFragment;
+import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 
 import javax.inject.Inject;
 
-public class MonthLyFeedFragment extends BaseFragment {
+public class MonthLyFeedFragment extends FeedFragment {
 
     @Inject
     public MonthLyFeedFragment() {
@@ -20,6 +20,26 @@ public class MonthLyFeedFragment extends BaseFragment {
 
     @Override
     protected void setUpView(View view) {
+        super.setUpView(view);
+    }
+
+    @Override
+    protected void attachPresenter() {
+
+    }
+
+    @Override
+    protected QuestionsAdapter getAdapter() {
+        return null;
+    }
+
+    @Override
+    protected void setRefreshLayout(boolean refresh) {
+
+    }
+
+    @Override
+    public void onQuestionsLoaded() {
 
     }
 }

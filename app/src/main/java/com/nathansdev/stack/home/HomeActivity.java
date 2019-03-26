@@ -123,6 +123,7 @@ public class HomeActivity extends BaseActivity {
 
         });
         tableLayout.setupWithViewPager(viewPager);
+        tableLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewPager.setCurrentItem(0);
     }
 

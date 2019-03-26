@@ -20,7 +20,7 @@ public class InterestingFeedFragment extends FeedFragment {
 
     @Override
     protected void setUpView(View view) {
-
+        super.setUpView(view);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class InterestingFeedFragment extends FeedFragment {
 
     @Override
     protected QuestionsAdapter getAdapter() {
-        return new QuestionsAdapter();
+        return null;
     }
 
     @Override
