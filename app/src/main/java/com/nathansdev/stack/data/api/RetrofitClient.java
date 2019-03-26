@@ -11,7 +11,7 @@ public class RetrofitClient {
     private static Retrofit retrofit;
     private static final String BASE_URL = "https://api.stackexchange.com";
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getRetrofit() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
