@@ -13,7 +13,7 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
     @Override
     public void onAttach(V mvpView) {
-        Timber.v("attachPresenter view");
+        Timber.v("loadFeedWithDelay view");
         mMvpView = mvpView;
     }
 

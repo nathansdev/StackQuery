@@ -1,8 +1,10 @@
 package com.nathansdev.stack.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -10,6 +12,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionManager;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -20,6 +28,9 @@ import com.nathansdev.stack.R;
 import timber.log.Timber;
 
 public class Utils {
+
+    private static final String NEW_API = "NewApi";
+
     /**
      * Load round image into imageview.
      *
@@ -101,5 +112,54 @@ public class Utils {
         Drawable white = DrawableCompat.wrap(nonWhite);
         DrawableCompat.setTint(white, ContextCompat.getColor(context, colorRes));
         return white;
+    }
+
+
+    /**
+     * Slide Transition
+     *
+     * @param rootView Scene root.
+     */
+    @SuppressLint(NEW_API)
+    public static void captureTransitionSlide(ViewGroup rootView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionManager.beginDelayedTransition(rootView, new Slide());
+        }
+    }
+
+    /**
+     * Explode Transition
+     *
+     * @param rootView Scene root.
+     */
+    @SuppressLint(NEW_API)
+    public static void captureTransitionExplode(ViewGroup rootView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionManager.beginDelayedTransition(rootView, new Explode());
+        }
+    }
+
+    /**
+     * Slide Transition
+     *
+     * @param rootView Scene root.
+     */
+    @SuppressLint(NEW_API)
+    public static void captureTransitionSlideRightToLeft(ViewGroup rootView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionManager.beginDelayedTransition(rootView, new Slide(Gravity.END));
+        }
+    }
+
+    /**
+     * Fade Transition
+     *
+     * @param rootView Scene root.
+     */
+    @SuppressLint(NEW_API)
+    public static void captureTransitionFade(ViewGroup rootView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionManager.beginDelayedTransition(rootView, new Fade());
+        }
     }
 }

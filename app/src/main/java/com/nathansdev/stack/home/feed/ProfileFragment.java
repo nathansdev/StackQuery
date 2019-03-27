@@ -4,19 +4,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.webkit.CookieManager;
 
+import com.nathansdev.stack.AppConstants;
+import com.nathansdev.stack.AppPreferences;
 import com.nathansdev.stack.R;
 import com.nathansdev.stack.base.BaseFragment;
+import com.nathansdev.stack.common.CommonPresenter;
+import com.nathansdev.stack.common.CommonView;
+import com.nathansdev.stack.data.model.Owner;
 import com.nathansdev.stack.home.profile.MyFeedFragment;
 import com.nathansdev.stack.rxevent.AppEvents;
 import com.nathansdev.stack.rxevent.RxEventBus;
@@ -29,14 +33,11 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment implements HasSupportFragmentInjector, AppBarLayout.OnOffsetChangedListener {
+public class ProfileFragment extends BaseFragment implements HasSupportFragmentInjector, CommonView {
 
-    private boolean mIsTheTitleVisible = false;
-    private boolean mIsTheTitleContainerVisible = true;
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_AT_TOOLBAR = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION = 200;
+    private static final String FRAG_TAG_MY_FEED = "myFeedFragment";
 
     @Inject
     public ProfileFragment() {
@@ -48,6 +49,10 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
     @Inject
     RxEventBus eventBus;
     @Inject
+    AppPreferences preferences;
+    @Inject
+    CommonPresenter<CommonView> presenter;
+    @Inject
     MyFeedFragment myFeedFragment;
 
     @BindView(R.id.my_feeds_container)
@@ -56,19 +61,12 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.profile_name)
-    TextView profileName;
-    @BindView(R.id.profile_avatar)
-    ImageView profileAvatar;
-    @BindView(R.id.profile_layout)
-    View profileLayout;
-    @BindView(R.id.profile_collapse_layout)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-
-    public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
+    @BindView(R.id.screen_mask_with_loader)
+    View mask;
+    @BindView(R.id.login_empty_state_panel)
+    View loginPanel;
+    @BindView(R.id.button_login)
+    View buttonLogin;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,26 +78,74 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         setViewUnbinder(ButterKnife.bind(this, rootView));
+        presenter.onAttach(this);
         return rootView;
     }
 
     @Override
     protected void setUpView(View view) {
         toolbar.setNavigationIcon(Utils.getTintedVectorAsset(getActivity(), R.drawable.ic_close_black_24dp, R.color.black));
-        toolbar.inflateMenu(R.menu.menu_logout);
-        toolbar.setOverflowIcon(Utils.getTintedVectorAsset(getActivity(), R.drawable.ic_more_vert_black_24dp, R.color.black));
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_logout) {
-                eventBus.send(new Pair<>(AppEvents.LOGOUT_CLICKED, null));
+        toolbar.setNavigationOnClickListener(v -> eventBus.send(new Pair<>(AppEvents.BACK_ARROW_CLICKED, " ")));
+        addChildFragment();
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventBus.send(new Pair<>(AppEvents.LOGIN_CLICKED, null));
+            }
+        });
+    }
+
+    private void addChildFragment() {
+        MyFeedFragment myFeedFrag = getMyFeedFrag();
+        if (myFeedFrag == null) {
+            myFeedFrag = myFeedFragment;
+            myFeedFrag.setArguments(getFilterArgBundle());
+            getChildFragmentManager().beginTransaction()
+                    .add(myFeedsContainer.getId(), myFeedFrag, FRAG_TAG_MY_FEED).commit();
+        }
+    }
+
+    /**
+     * Return Feedback filter fragment by tag.
+     *
+     * @return Feedback filter fragment.
+     */
+    private MyFeedFragment getMyFeedFrag() {
+        return (MyFeedFragment) getChildFragmentManager().findFragmentByTag(FRAG_TAG_MY_FEED);
+    }
+
+    private Bundle getFilterArgBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.ARG_FILTER_TYPE, AppConstants.MY_FEED);
+        return bundle;
+    }
+
+    private void showOptionsMenu(View view, PopupMenu.OnMenuItemClickListener onMenuItemClickListener) {
+        PopupMenu popup = new PopupMenu(getActivity(), view, Gravity.END);
+        popup.getMenuInflater().inflate(R.menu.action_menu_logout,
+                popup.getMenu());
+        popup.show();
+        popup.setOnMenuItemClickListener(onMenuItemClickListener);
+    }
+
+    private PopupMenu.OnMenuItemClickListener menuItemClickListener(RxEventBus eventBus) {
+        return item -> {
+            switch (item.getItemId()) {
+                case R.id.action_logout:
+                    eventBus.send(new Pair<>(AppEvents.LOGOUT_CLICKED, null));
+                    break;
+                default:
+                    break;
             }
             return true;
-        });
-        toolbar.setNavigationOnClickListener(v -> eventBus.send(new Pair<>(AppEvents.BACK_ARROW_CLICKED, " ")));
+        };
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.cleanUp();
+        presenter.onDetach();
     }
 
     @Override
@@ -107,54 +153,40 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
         return childFragmentInjector;
     }
 
+    public void handleProfileClicked() {
+        if (preferences.isLoggedIn()) {
+            toolbar.getMenu().clear();
+            toolbar.inflateMenu(R.menu.menu_logout);
+            toolbar.setOnMenuItemClickListener(menuItem -> {
+                if (menuItem.getItemId() == R.id.action_logout_menu) {
+                    showOptionsMenu(toolbar, menuItemClickListener(eventBus));
+                }
+                return false;
+            });
+            presenter.loadUser();
+            myFeedFragment.loadQuestions();
+        } else {
+            loginPanel.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        int maxScroll = appBarLayout.getTotalScrollRange();
-        float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
-        handleAlphaOnTitle(percentage);
-        handleToolbarTitleVisibility(percentage);
+    public void showUser(Owner owner) {
+        Timber.d("showUser %s", owner);
+        toolbar.setTitle(owner.name());
     }
 
-    private void handleToolbarTitleVisibility(float percentage) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-            if (!mIsTheTitleVisible) {
-                startAlphaAnimation(toolbar, View.VISIBLE);
-                mIsTheTitleVisible = true;
-            }
-        } else {
-            if (mIsTheTitleVisible) {
-                startAlphaAnimation(toolbar, View.INVISIBLE);
-                mIsTheTitleVisible = false;
-            }
-        }
+    @Override
+    public void onLoggedOut() {
+        preferences.setIsLoggedIn(false);
+        preferences.removeAccessToken();
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
+        eventBus.send(new Pair<>(AppEvents.LOGOUT_COMPLETED, null));
     }
 
-    private void handleAlphaOnTitle(float percentage) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_AT_TOOLBAR) {
-            if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(profileLayout, View.INVISIBLE);
-                mIsTheTitleContainerVisible = false;
-            }
-        } else {
-            if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(profileLayout, View.VISIBLE);
-                mIsTheTitleContainerVisible = true;
-            }
-        }
-    }
-
-    private void startAlphaAnimation(View v, int visibility) {
-        if (v instanceof Toolbar) {
-            Toolbar toolbar = (Toolbar) v;
-            toolbar.setTitle(visibility == View.VISIBLE ? "Sabarinathan" : "");
-        } else {
-            AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
-                    ? new AlphaAnimation(0f, 1f)
-                    : new AlphaAnimation(1f, 0f);
-
-            alphaAnimation.setDuration((long) ProfileFragment.ALPHA_ANIMATIONS_DURATION);
-            alphaAnimation.setFillAfter(true);
-            v.startAnimation(alphaAnimation);
-        }
+    public void logOutUser() {
+        mask.setVisibility(View.VISIBLE);
+        presenter.invalidateAccessToken(preferences.getAccessToken());
     }
 }

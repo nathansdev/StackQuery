@@ -1,5 +1,6 @@
 package com.nathansdev.stack.home;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.R;
+import com.nathansdev.stack.auth.LoginActivity;
 import com.nathansdev.stack.base.BaseActivity;
 import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
@@ -23,6 +26,7 @@ import com.nathansdev.stack.home.feed.ProfileFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
 import com.nathansdev.stack.rxevent.AppEvents;
 import com.nathansdev.stack.rxevent.RxEventBus;
+import com.nathansdev.stack.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -50,6 +54,9 @@ public class HomeActivity extends BaseActivity {
     TabLayout tableLayout;
     @BindView(R.id.profile_view_container)
     View profileViewContainer;
+    @BindView(R.id.root)
+    ViewGroup rootView;
+
     @Inject
     FeaturedFeedFragment featuredFeedFragment;
     @Inject
@@ -97,6 +104,14 @@ public class HomeActivity extends BaseActivity {
             handleProfileMenuClicked();
         } else if (event.first.equalsIgnoreCase(AppEvents.QUESTION_TAG_CLICKED)) {
             handleQuestionsTagClicked((String) event.second);
+        } else if (event.first.equalsIgnoreCase(AppEvents.BACK_ARROW_CLICKED)) {
+            handleBackPressed();
+        } else if (event.first.equalsIgnoreCase(AppEvents.LOGIN_CLICKED)) {
+            handleLogOutCompleted();
+        } else if (event.first.equalsIgnoreCase(AppEvents.LOGOUT_CLICKED)) {
+            handleLogOutClicked();
+        } else if (event.first.equalsIgnoreCase(AppEvents.LOGOUT_COMPLETED)) {
+            handleLogOutCompleted();
         }
     }
 
@@ -113,9 +128,9 @@ public class HomeActivity extends BaseActivity {
     }
 
     /**
-     * Return Feedback filter fragment by tag.
+     * Return Profile fragment by tag.
      *
-     * @return Feedback filter fragment.
+     * @return Profile fragment.
      */
     private ProfileFragment getProfileFrag() {
         return (ProfileFragment) getSupportFragmentManager().findFragmentByTag(FRAG_TAG_PROFILE);
@@ -151,8 +166,6 @@ public class HomeActivity extends BaseActivity {
 
         });
         tableLayout.setupWithViewPager(viewPager);
-        tableLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        viewPager.setCurrentItem(0);
     }
 
     private void setUpViews() {
@@ -167,7 +180,28 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void handleProfileMenuClicked() {
+        Utils.captureTransitionSlide(rootView);
+        profileViewContainer.setVisibility(View.VISIBLE);
+        selfFragment.handleProfileClicked();
+    }
 
+    private void handleLogOutCompleted() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void handleLogOutClicked() {
+        selfFragment.logOutUser();
+    }
+
+    private void handleBackPressed() {
+        if (profileViewContainer.getVisibility() == View.VISIBLE) {
+            Utils.captureTransitionSlide(rootView);
+            profileViewContainer.setVisibility(View.INVISIBLE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void handleQuestionsTagClicked(String tag) {
@@ -198,6 +232,11 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        handleBackPressed();
     }
 
     @Override

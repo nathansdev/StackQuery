@@ -86,7 +86,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     @Override
     public void loadQuestions() {
-        Timber.d("loadQuestions");
+        Timber.d("loadQuestions %s %s", type, page);
         if (!isLoading) {
             isLoading = true;
             questionsSubject.onNext(page);
@@ -95,7 +95,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     @Override
     public void loadNextPage() {
-        Timber.d("loadNextPage");
+        Timber.d("loadNextPage %s %s", type, page);
         if (!isLoading) {
             isLoading = true;
             page++;
@@ -109,7 +109,12 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     }
 
     private Flowable<QuestionsResponse> getObservable() {
-        return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 10)
-                .subscribeOn(Schedulers.io());
+        if (type.equalsIgnoreCase(AppConstants.MY_FEED)) {
+            return api.getUsersQuestionsFlowable("5361783", AppConstants.ACTIVITY, AppConstants.SITE, AppConstants.DESC, page, 10)
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 10)
+                    .subscribeOn(Schedulers.io());
+        }
     }
 }
