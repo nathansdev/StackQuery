@@ -155,6 +155,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
         ImageView avatar;
         @BindView(R.id.flow_layout_tags)
         ViewGroup tagsLayout;
+        @BindView(R.id.tv_view_count)
+        TextView viewCount;
+        @BindView(R.id.tv_answer_count)
+        TextView answerCount;
+        @BindView(R.id.tv_vote_count)
+        TextView votesCount;
 
         /**
          * Initialize constructor with item view.
@@ -186,19 +192,17 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
             Utils.loadRoundImage(itemView.getContext(), row.imageUrl(), avatar);
             ownerName.setText(row.name());
             title.setText(row.title());
-            timeStamp.setText(String.valueOf(row.timeStamp()));
+            timeStamp.setText(Utils.timeStampRelativeToCurrentTime(row.timeStamp() * 1000));
             if (row.question().tags() != null && !row.question().tags().isEmpty()) {
                 for (String tag : row.question().tags()) {
                     TagView tagView = TagView.formView(tagsLayout, tag);
-                    tagView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            eventBus.send(new Pair<>(AppEvents.QUESTION_TAG_CLICKED, tag));
-                        }
-                    });
+                    tagView.setOnClickListener(v -> eventBus.send(new Pair<>(AppEvents.QUESTION_TAG_CLICKED, tag)));
                     tagsLayout.addView(tagView);
                 }
             }
+            viewCount.setText(String.valueOf(row.question().viewCount()));
+            answerCount.setText(String.valueOf(row.question().answerCount()));
+            votesCount.setText(String.valueOf(row.question().score()));
         }
 
         @Override

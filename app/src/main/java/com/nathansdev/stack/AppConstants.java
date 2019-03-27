@@ -18,4 +18,5 @@ public final class AppConstants {
     public static final String ACCESS_TOKEN = "access_token";
     public static final String EXPIRES = "expires";
     public static final String ERROR = "error";
+    public static final String KEY = "key";
 }

@@ -1,6 +1,8 @@
 package com.nathansdev.stack.home.feed;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -44,6 +46,8 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
     private int lastVisibleItem;
     private boolean loadingMore = false;
     private String filterType = "activity";
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,25 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
             filterType = getArguments().getString(AppConstants.ARG_FILTER_TYPE);
         }
     }
+
+    private RecyclerView.OnScrollListener onScrollListener =
+            new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    if (lastVisibleItem > -1) {
+                        QuestionsAdapterRow row = dataset.get(lastVisibleItem);
+                        if (row.isTypeLoadMore()) {
+                            Timber.d("loadingMore %s", loadingMore);
+                            if (!loadingMore) {
+                                loadingMore = true;
+                                loadNextPage();
+                            }
+                        }
+                    }
+                }
+            };
+
 
     @Nullable
     @Override
@@ -75,20 +98,7 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItem > -1) {
-                    QuestionsAdapterRow row = dataset.get(lastVisibleItem);
-                    if (!loadingMore && row.isTypeLoadMore()) {
-                        loadingMore = true;
-                        loadNextPage();
-                    }
-                }
-            }
-        });
+        recyclerView.addOnScrollListener(onScrollListener);
         adapter.setEventBus(eventBus);
         if (dataset == null) {
             Timber.d("creating new data set");
@@ -103,15 +113,12 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Override
     public void showLoading() {
-        dataset.addRow(QuestionsAdapterRow.ofLoading());
         setRefreshLayout(false);
     }
 
     @Override
     public void hideLoading() {
-        loadingMore = false;
-        dataset.removeLoading();
-        setRefreshLayout(true);
+        loadingMore = !loadingMore;
     }
 
     @Override
@@ -122,7 +129,7 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
     @Override
     public void onDestroyView() {
         refreshLayout.setOnRefreshListener(null);
-        recyclerView.setOnScrollListener(null);
+        recyclerView.removeOnScrollListener(onScrollListener);
         super.onDestroyView();
     }
 
@@ -133,18 +140,15 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
     }
 
     private void loadNextPage() {
-        Timber.d("loading next page");
         presenter.loadNextPage();
     }
 
-
     @Override
     public void onQuestionsLoaded() {
-        loadingMore = false;
+        loadingMore = !loadingMore;
     }
 
     protected abstract void attachPresenter();
 
     protected abstract QuestionsAdapter getAdapter();
-
 }

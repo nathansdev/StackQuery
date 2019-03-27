@@ -21,7 +21,7 @@ public class AppPreferences {
         return prefs.getBoolean(IS_LOGGEDIN, Boolean.FALSE);
     }
 
-    public void setIsLoggedin(boolean isLoggedin) {
+    public void setIsLoggedIn(boolean isLoggedin) {
         prefs.edit().putBoolean(IS_LOGGEDIN, isLoggedin).apply();
     }
 

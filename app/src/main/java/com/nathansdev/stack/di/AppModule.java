@@ -3,7 +3,9 @@ package com.nathansdev.stack.di;
 import android.app.Application;
 import android.content.Context;
 
+import com.nathansdev.stack.AppConfig;
 import com.nathansdev.stack.AppPreferences;
+import com.nathansdev.stack.R;
 import com.nathansdev.stack.rxevent.RxEventBus;
 
 import javax.inject.Singleton;
@@ -31,5 +33,16 @@ abstract class AppModule {
     @Singleton
     static AppPreferences provideAppPreferences(Application application) {
         return new AppPreferences(application);
+    }
+
+    @Provides
+    @Singleton
+    static AppConfig provideAppConfig(Application application) {
+        return AppConfig.builder()
+                .clientId(application.getString(R.string.client_id))
+                .accesskey(application.getString(R.string.access_key))
+                .clientSecretId(application.getString(R.string.client_secret_id))
+                .redirectUri(application.getString(R.string.redirect_uri))
+                .build();
     }
 }

@@ -53,7 +53,6 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
                     @Override
                     protected void onNextAction(QuestionsResponse response) {
-                        Timber.d("questions %s", response);
                         getMvpView().hideLoading();
                         handleQuestionResponse(response);
                     }
@@ -67,6 +66,9 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     }
 
     private void handleQuestionResponse(QuestionsResponse response) {
+        Timber.d("handleQuestionResponse %s", response.hasMore());
+        rowDataSet.removeLoading();
+        rowDataSet.removeLoadMore();
         List<QuestionsAdapterRow> rows = new ArrayList<>();
         if (response != null && response.questions() != null && !response.questions().isEmpty()) {
             for (Question question : response.questions()) {
@@ -77,6 +79,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
             }
         }
         rowDataSet.addAllRows(rows);
+        getMvpView().onQuestionsLoaded();
     }
 
     @Override
@@ -88,7 +91,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     @Override
     public void loadNextPage() {
         Timber.d("loadNextPage");
-        page = page + 1;
+        page++;
         questionsSubject.onNext(page);
     }
 

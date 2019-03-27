@@ -75,19 +75,21 @@ public abstract class QuestionsAdapterRow implements Parcelable {
      * 1 if new item should below the existing item.
      */
     public int compare(QuestionsAdapterRow r2) {
-        int comparedValue = 1;
-        if (this.isTypeLoadMore() && r2.isTypeLoadMore()) {
+        int comparedValue = -1;
+        if (this.isTypeQuestion() && r2.isTypeLoadMore()) {
+            return -1;
+        } else if (this.isTypeLoadMore() && r2.isTypeQuestion()) {
+            return 1;
+        } else if (this.isTypeQuestion() && r2.isTypeLoading()) {
+            return -1;
+        } else if (this.isTypeLoading() && r2.isTypeQuestion()) {
+            return 1;
+        } else if (this.isTypeLoadMore() && r2.isTypeLoadMore()) {
             return 0;
         } else if (this.isTypeLoading() && r2.isTypeLoading()) {
             return 0;
         } else if (this.isTypeError() && r2.isTypeError()) {
             return 0;
-        } else if (this.isTypeQuestion() && r2.isTypeQuestion()) {
-            return 1;
-        } else if (this.isTypeQuestion() && r2.isTypeLoadMore()) {
-            return 1;
-        } else if (this.isTypeLoadMore() && r2.isTypeQuestion()) {
-            return -1;
         }
         return comparedValue;
     }
@@ -124,10 +126,7 @@ public abstract class QuestionsAdapterRow implements Parcelable {
             return true;
         } else if (isTypeLoading() && newItem.isTypeLoading()) {
             return true;
-        } else if (isTypeError() && newItem.isTypeError()) {
-            return true;
-        }
-        return false;
+        } else return isTypeError() && newItem.isTypeError();
     }
 
     @Nullable
