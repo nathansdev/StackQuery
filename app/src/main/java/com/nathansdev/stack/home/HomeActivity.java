@@ -1,5 +1,6 @@
 package com.nathansdev.stack.home;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -7,6 +8,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.R;
@@ -88,6 +92,8 @@ public class HomeActivity extends BaseActivity {
     private void handleEventData(Pair<String, Object> event) {
         if (event.first.equalsIgnoreCase(AppEvents.PROFILE_MENU_CLICKED)) {
             handleProfileMenuClicked();
+        } else if (event.first.equalsIgnoreCase(AppEvents.QUESTION_TAG_CLICKED)) {
+            handleQuestionsTagClicked((String) event.second);
         }
     }
 
@@ -145,6 +151,20 @@ public class HomeActivity extends BaseActivity {
 
     private void handleProfileMenuClicked() {
 
+    }
+
+    private void handleQuestionsTagClicked(String tag) {
+        Toast toast = Toast.makeText(this, tag, Toast.LENGTH_SHORT);
+
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.SRC_IN);
+
+        //Gets the TextView from the Toast so it can be edited
+        TextView text = view.findViewById(android.R.id.message);
+        text.setTextColor(getResources().getColor(R.color.white));
+        toast.show();
     }
 
     private Bundle getFilterArgBundle(String filterType) {

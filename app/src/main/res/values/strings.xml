@@ -19,4 +19,7 @@
         <item>WeekLy</item>
         <item>Self</item>
     </string-array>
+
+    <string name="login_with_stackoverflow">Login With StackOverflow</string>
+    <string name="skip">skip</string>
 </resources>

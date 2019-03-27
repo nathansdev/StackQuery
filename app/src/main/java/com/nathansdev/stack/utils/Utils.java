@@ -7,8 +7,11 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.nathansdev.stack.GlideApp;
 import com.nathansdev.stack.R;
+
+import timber.log.Timber;
 
 public class Utils {
     /**
@@ -34,4 +37,16 @@ public class Utils {
                     }
                 });
     }
+
+    /**
+     * Return time stamp for epoch time.
+     *
+     * @param epoch unix time stamp.
+     * @return time stamp in string with particular format eg: Dec 29, 2107
+     */
+    public static String timeStampRelativeToCurrentTime(long epoch) {
+        Timber.d("timeStampRelativeToCurrentTime %s", TimeAgo.using(epoch));
+        return TimeAgo.using(epoch );
+    }
+
 }

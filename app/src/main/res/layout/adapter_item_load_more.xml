@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:padding="16dp">
 
     <ProgressBar
         style="?android:attr/android:progressBarStyleSmall"

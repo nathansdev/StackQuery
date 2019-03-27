@@ -1,5 +1,6 @@
 package com.nathansdev.stack.di;
 
+import com.nathansdev.stack.auth.LoginActivity;
 import com.nathansdev.stack.home.HomeActivity;
 import com.nathansdev.stack.home.HomeActivityModule;
 import com.nathansdev.stack.splash.SplashActivity;
@@ -19,4 +20,8 @@ abstract class ActivityBuilderModule {
     @PerActivity
     @ContributesAndroidInjector
     abstract SplashActivity bindSplashActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract LoginActivity bindLoginActivity();
 }
