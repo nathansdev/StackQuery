@@ -1,20 +1,21 @@
-package com.nathansdev.stack.home.feed;
+package com.nathansdev.stack.home.profile;
 
 import android.view.View;
 
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
+import com.nathansdev.stack.home.feed.FeedFragment;
 
 import javax.inject.Inject;
 
-public class HotFeedFragment extends FeedFragment {
+public class MyFeedFragment extends FeedFragment {
 
     @Inject
-    public HotFeedFragment() {
+    public MyFeedFragment() {
 
     }
 
-    public static HotFeedFragment newInstance() {
-        HotFeedFragment fragment = new HotFeedFragment();
+    public static MyFeedFragment newInstance() {
+        MyFeedFragment fragment = new MyFeedFragment();
         return fragment;
     }
 

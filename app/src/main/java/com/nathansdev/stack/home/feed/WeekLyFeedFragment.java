@@ -20,7 +20,7 @@ public class WeekLyFeedFragment extends FeedFragment {
 
     @Override
     protected void setUpView(View view) {
-//        super.setUpView(view);
+        super.setUpView(view);
     }
 
     @Override

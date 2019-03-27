@@ -31,7 +31,7 @@ public class FeaturedFeedFragment extends FeedFragment {
 
     @Override
     protected void setUpView(View view) {
-//        super.setUpView(view);
+        super.setUpView(view);
     }
 
     @Override

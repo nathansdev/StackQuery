@@ -33,6 +33,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     private QuestionsAdapterRowDataSet rowDataSet;
     private String type;
     private long page = 1;
+    private boolean isLoading = false;
 
     @Inject
     FeedViewPresenterImpl(StackExchangeApi api) {
@@ -53,6 +54,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
                     @Override
                     protected void onNextAction(QuestionsResponse response) {
+                        isLoading = false;
                         getMvpView().hideLoading();
                         handleQuestionResponse(response);
                     }
@@ -85,14 +87,20 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     @Override
     public void loadQuestions() {
         Timber.d("loadQuestions");
-        questionsSubject.onNext(0L);
+        if (!isLoading) {
+            isLoading = true;
+            questionsSubject.onNext(page);
+        }
     }
 
     @Override
     public void loadNextPage() {
         Timber.d("loadNextPage");
-        page++;
-        questionsSubject.onNext(page);
+        if (!isLoading) {
+            isLoading = true;
+            page++;
+            questionsSubject.onNext(page);
+        }
     }
 
     @Override

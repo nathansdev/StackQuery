@@ -1,8 +1,6 @@
 package com.nathansdev.stack.home.feed;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,10 +41,7 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
     private LinearLayoutManager layoutManager;
     private QuestionsAdapter adapter;
     private QuestionsAdapterRowDataSet dataset;
-    private int lastVisibleItem;
-    private boolean loadingMore = false;
     private String filterType = "activity";
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,20 +55,15 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
             new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                     if (lastVisibleItem > -1) {
                         QuestionsAdapterRow row = dataset.get(lastVisibleItem);
                         if (row.isTypeLoadMore()) {
-                            Timber.d("loadingMore %s", loadingMore);
-                            if (!loadingMore) {
-                                loadingMore = true;
                                 loadNextPage();
-                            }
                         }
                     }
                 }
             };
-
 
     @Nullable
     @Override
@@ -118,7 +108,6 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Override
     public void hideLoading() {
-        loadingMore = !loadingMore;
     }
 
     @Override
@@ -145,7 +134,6 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Override
     public void onQuestionsLoaded() {
-        loadingMore = !loadingMore;
     }
 
     protected abstract void attachPresenter();

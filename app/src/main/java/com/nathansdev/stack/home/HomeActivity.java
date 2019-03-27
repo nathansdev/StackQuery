@@ -19,7 +19,7 @@ import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
 import com.nathansdev.stack.home.feed.MonthLyFeedFragment;
-import com.nathansdev.stack.home.feed.SelfFragment;
+import com.nathansdev.stack.home.feed.ProfileFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
 import com.nathansdev.stack.rxevent.AppEvents;
 import com.nathansdev.stack.rxevent.RxEventBus;
@@ -35,6 +35,7 @@ import timber.log.Timber;
 
 public class HomeActivity extends BaseActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
+    private static final String FRAG_TAG_PROFILE = "profileFragment";
 
     // injection
     @Inject
@@ -47,6 +48,8 @@ public class HomeActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.tabs)
     TabLayout tableLayout;
+    @BindView(R.id.profile_view_container)
+    View profileViewContainer;
     @Inject
     FeaturedFeedFragment featuredFeedFragment;
     @Inject
@@ -58,7 +61,7 @@ public class HomeActivity extends BaseActivity {
     @Inject
     WeekLyFeedFragment weekLyFeedFragment;
     @Inject
-    SelfFragment selfFragment;
+    ProfileFragment selfFragment;
 
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HomePagerAdapter homePagerAdapter;
@@ -101,7 +104,21 @@ public class HomeActivity extends BaseActivity {
      * add all fragments to activity.
      */
     private void addFragmentsToContainer() {
+        ProfileFragment seenFrag = getProfileFrag();
+        if (seenFrag == null) {
+            seenFrag = selfFragment;
+            getSupportFragmentManager().beginTransaction()
+                    .add(profileViewContainer.getId(), seenFrag, FRAG_TAG_PROFILE).commit();
+        }
+    }
 
+    /**
+     * Return Feedback filter fragment by tag.
+     *
+     * @return Feedback filter fragment.
+     */
+    private ProfileFragment getProfileFrag() {
+        return (ProfileFragment) getSupportFragmentManager().findFragmentByTag(FRAG_TAG_PROFILE);
     }
 
     /**
@@ -114,8 +131,7 @@ public class HomeActivity extends BaseActivity {
         monthLyFeedFragment.setArguments(getFilterArgBundle(AppConstants.MONTH));
         weekLyFeedFragment.setArguments(getFilterArgBundle(AppConstants.WEEK));
         homePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), activityFeedFragment,
-                featuredFeedFragment, hotFeedFragment, monthLyFeedFragment, weekLyFeedFragment,
-                selfFragment, getResources().getStringArray(R.array.home_tabs));
+                featuredFeedFragment, hotFeedFragment, monthLyFeedFragment, weekLyFeedFragment, getResources().getStringArray(R.array.home_tabs));
         viewPager.setAdapter(homePagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -140,6 +156,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void setUpViews() {
+        profileViewContainer.setVisibility(View.INVISIBLE);
         toolbar.inflateMenu(R.menu.menu_profile);
         toolbar.setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.action_profile) {
