@@ -18,6 +18,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+/**
+ * Child fragment for displaying loggedin user questions.
+ */
 public class MyFeedFragment extends FeedFragment implements FeedView {
 
     @Inject
@@ -49,9 +52,9 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
 
     @Override
     protected void setUpView(View view) {
-//        super.setUpView(view);
-//        Timber.d("setUpView");
-//        presenter.init(dataset, filterType);
+        super.setUpView(view);
+        Timber.d("setUpView");
+        presenter.init(dataset, filterType);
     }
 
     @Override
@@ -69,7 +72,6 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
         return new QuestionsAdapter();
     }
 
-
     @Override
     protected QuestionsAdapterRowDataSet getAdapterDataSet(QuestionsAdapter adapter) {
         return QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
@@ -83,6 +85,7 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
         Timber.d("onQuestionsLoaded");
+        adapter.notifyDataSetChanged();
     }
 
     @Override

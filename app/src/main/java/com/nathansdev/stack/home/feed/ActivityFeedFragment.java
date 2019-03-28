@@ -15,6 +15,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+/**
+ * Feeds Fragment with filtertype "activity".
+ */
 public class ActivityFeedFragment extends FeedFragment implements FeedView {
 
     @Inject
@@ -70,6 +73,7 @@ public class ActivityFeedFragment extends FeedFragment implements FeedView {
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
         Timber.d("onQuestionsLoaded");
+        adapter.notifyDataSetChanged();
     }
 
     @Override

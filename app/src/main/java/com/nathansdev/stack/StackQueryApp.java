@@ -14,6 +14,9 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 
+/**
+ * Application class for StackQuery app.
+ */
 public class StackQueryApp extends Application implements HasActivityInjector {
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
@@ -21,6 +24,7 @@ public class StackQueryApp extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
+        //init dagger injection
         DaggerAppComponent
                 .builder()
                 .application(this)

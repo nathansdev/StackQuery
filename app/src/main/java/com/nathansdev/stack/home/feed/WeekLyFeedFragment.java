@@ -15,6 +15,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+/**
+ * Feeds Fragment with filtertype "week".
+ */
 public class WeekLyFeedFragment extends FeedFragment implements FeedView {
 
     @Inject
@@ -72,6 +75,7 @@ public class WeekLyFeedFragment extends FeedFragment implements FeedView {
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
         Timber.d("onQuestionsLoaded");
+        adapter.notifyDataSetChanged();
     }
 
     @Override

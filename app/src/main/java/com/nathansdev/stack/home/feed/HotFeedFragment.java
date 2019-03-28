@@ -14,7 +14,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
+/**
+ * Feeds Fragment with filtertype "hot".
+ */
 public class HotFeedFragment extends FeedFragment implements FeedView {
 
     @Inject
@@ -72,6 +74,7 @@ public class HotFeedFragment extends FeedFragment implements FeedView {
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
         Timber.d("onQuestionsLoaded");
+        adapter.notifyDataSetChanged();
     }
 
     @Override

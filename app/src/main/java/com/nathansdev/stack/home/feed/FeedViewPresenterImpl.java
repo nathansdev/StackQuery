@@ -1,6 +1,7 @@
 package com.nathansdev.stack.home.feed;
 
 import com.nathansdev.stack.AppConstants;
+import com.nathansdev.stack.AppPreferences;
 import com.nathansdev.stack.base.BasePresenter;
 import com.nathansdev.stack.data.api.StackExchangeApi;
 import com.nathansdev.stack.data.model.Question;
@@ -25,26 +26,31 @@ import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+/**
+ * implementer class to fetch and add to recyclerview from api.
+ */
 public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> implements FeedViewPresenter<V> {
 
     private StackExchangeApi api;
+    private AppPreferences preferences;
     private PublishProcessor<Long> questionsSubject = PublishProcessor.create();
     private CompositeDisposable disposables = new CompositeDisposable();
     private QuestionsAdapterRowDataSet rowDataSet;
-    private QuestionsAdapterRowDataSet second;
     private String type;
     private long page = 1;
     private boolean isLoading = false;
 
     @Inject
-    FeedViewPresenterImpl(StackExchangeApi api) {
+    FeedViewPresenterImpl(StackExchangeApi api, AppPreferences preferences) {
         this.api = api;
+        this.preferences = preferences;
     }
 
     @Override
     public void init(QuestionsAdapterRowDataSet dataset, String filterType) {
         this.rowDataSet = dataset;
         this.type = filterType;
+        dataset.addRow(QuestionsAdapterRow.ofLoading());
         getMvpView().showLoading();
         Disposable disposable = questionsSubject
                 .onBackpressureDrop()
@@ -112,10 +118,10 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     private Flowable<QuestionsResponse> getObservable() {
         if (type.equalsIgnoreCase(AppConstants.MY_FEED)) {
-            return api.getUsersQuestionsFlowable("5361783", AppConstants.ACTIVITY, AppConstants.SITE, AppConstants.DESC, page, 10)
+            return api.getUsersQuestionsFlowable(preferences.getUserId(), AppConstants.ACTIVITY, AppConstants.SITE, AppConstants.DESC, page, 10)
                     .subscribeOn(Schedulers.io());
         } else {
-            return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 10)
+            return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 20)
                     .subscribeOn(Schedulers.io());
         }
     }

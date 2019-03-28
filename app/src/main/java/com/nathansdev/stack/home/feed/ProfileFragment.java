@@ -35,6 +35,9 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
+/**
+ * profile fragment to display loggedin user.
+ */
 public class ProfileFragment extends BaseFragment implements HasSupportFragmentInjector, CommonView {
 
     private static final String FRAG_TAG_MY_FEED = "myFeedFragment";
@@ -164,7 +167,6 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
                 return false;
             });
             presenter.loadUser();
-            myFeedFragment.loadQuestions();
         } else {
             loginPanel.setVisibility(View.VISIBLE);
         }
@@ -173,13 +175,15 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
     @Override
     public void showUser(Owner owner) {
         Timber.d("showUser %s", owner);
+        preferences.setUserId(owner.id());
         toolbar.setTitle(owner.name());
+        myFeedFragment.loadQuestions();
     }
 
     @Override
     public void onLoggedOut() {
         preferences.setIsLoggedIn(false);
-        preferences.removeAccessToken();
+        preferences.delete();
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
         eventBus.send(new Pair<>(AppEvents.LOGOUT_COMPLETED, null));

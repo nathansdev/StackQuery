@@ -10,6 +10,9 @@ import com.nathansdev.stack.base.BaseActivity
 import com.nathansdev.stack.home.HomeActivity
 import javax.inject.Inject
 
+/**
+ *  Splash screen with launcher theme.
+ */
 class SplashActivity : BaseActivity() {
 
     @Inject

@@ -26,7 +26,9 @@ import com.nathansdev.stack.GlideApp;
 import com.nathansdev.stack.R;
 
 import timber.log.Timber;
-
+/**
+ * a common utils class for the app.
+ */
 public class Utils {
 
     private static final String NEW_API = "NewApi";

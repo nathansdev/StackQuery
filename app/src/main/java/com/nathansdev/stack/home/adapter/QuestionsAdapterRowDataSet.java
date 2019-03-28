@@ -5,7 +5,9 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * SortedList class for ordering items.
+ */
 public class QuestionsAdapterRowDataSet extends SortedListAdapterCallback<QuestionsAdapterRow> {
 
     private SortedList<QuestionsAdapterRow> sortedList;

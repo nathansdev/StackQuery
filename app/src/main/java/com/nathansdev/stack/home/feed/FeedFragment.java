@@ -24,6 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+/**
+ * common feedsfragment for all.
+ */
 public abstract class FeedFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -47,7 +50,7 @@ public abstract class FeedFragment extends BaseFragment implements
                     if (lastVisibleItem > -1) {
                         QuestionsAdapterRow row = dataset.get(lastVisibleItem);
                         if (row.isTypeLoadMore()) {
-                                loadNextPage();
+                            loadNextPage();
                         }
                     }
                 }

@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.nathansdev.stack.R;
-
+/**
+ * custom tagview
+ */
 public class TagView extends AppCompatTextView {
     public TagView(Context context) {
         super(context);

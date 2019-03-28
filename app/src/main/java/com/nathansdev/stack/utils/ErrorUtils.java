@@ -15,6 +15,9 @@ import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import timber.log.Timber;
 
+/**
+ * a utils class to process the error message and code.
+ */
 public class ErrorUtils {
 
 
@@ -68,7 +71,7 @@ public class ErrorUtils {
      * @param error error json.
      * @return errorMessage.
      */
-    public static String parseErrorMessage(String error) {
+    private static String parseErrorMessage(String error) {
         Timber.d("Error message is %s", error);
         String errorMessage = "";
         Moshi moshi = new Moshi.Builder().build();
@@ -80,7 +83,7 @@ public class ErrorUtils {
                 errorMessage = errorResponse.message();
             }
         } catch (IOException e) {
-            Timber.d("Error message parsing exception %s", e);
+            Timber.e(e, "Error message parsing exception");
         }
         return errorMessage;
     }
