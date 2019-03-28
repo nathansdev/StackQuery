@@ -32,9 +32,10 @@
         <TextView
             android:id="@+id/text_questions_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/white_100"
             android:padding="10dp"
+            android:gravity="center_vertical"
             android:text="@string/all_questions"
             android:textColor="@color/grey" />
 

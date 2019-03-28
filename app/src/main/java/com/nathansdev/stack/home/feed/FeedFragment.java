@@ -24,6 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+/**
+ * common feedsfragment for all.
+ */
 public abstract class FeedFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -36,7 +39,7 @@ public abstract class FeedFragment extends BaseFragment implements
     RxEventBus eventBus;
 
     private LinearLayoutManager layoutManager;
-    private QuestionsAdapter adapter;
+    protected QuestionsAdapter adapter;
     protected QuestionsAdapterRowDataSet dataset;
 
     private RecyclerView.OnScrollListener onScrollListener =
@@ -47,7 +50,7 @@ public abstract class FeedFragment extends BaseFragment implements
                     if (lastVisibleItem > -1) {
                         QuestionsAdapterRow row = dataset.get(lastVisibleItem);
                         if (row.isTypeLoadMore()) {
-                                loadNextPage();
+                            loadNextPage();
                         }
                     }
                 }
@@ -69,23 +72,28 @@ public abstract class FeedFragment extends BaseFragment implements
 
     @Override
     protected void setUpView(View view) {
+        recyclerView.removeOnScrollListener(onScrollListener);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         if (adapter != null) {
             adapter.handleDestroy();
         }
         adapter = getAdapter();
+        if (dataset != null) {
+            dataset.handleDestroy();
+        }
+        if (adapter != null) {
+            if (dataset == null) {
+                Timber.d("creating new data set");
+                dataset = getAdapterDataSet(adapter);
+            }
+            adapter.setData(dataset);
+            adapter.setEventBus(eventBus);
+        }
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addOnScrollListener(onScrollListener);
-        adapter.setEventBus(eventBus);
-        if (dataset == null) {
-            Timber.d("creating new data set");
-            dataset = QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
-        }
-        adapter.setData(dataset);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(onScrollListener);
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setEnabled(false);
     }
@@ -105,8 +113,16 @@ public abstract class FeedFragment extends BaseFragment implements
 
     @Override
     public void onDestroyView() {
-        refreshLayout.setOnRefreshListener(null);
-        recyclerView.removeOnScrollListener(onScrollListener);
+        if (adapter != null) {
+            adapter.handleDestroy();
+            adapter = null;
+        }
+        if (recyclerView != null) {
+            recyclerView.removeOnScrollListener(onScrollListener);
+        }
+        if (refreshLayout != null) {
+            refreshLayout.setOnRefreshListener(null);
+        }
         super.onDestroyView();
     }
 
@@ -123,4 +139,6 @@ public abstract class FeedFragment extends BaseFragment implements
     protected abstract void loadFeeds();
 
     protected abstract QuestionsAdapter getAdapter();
+
+    protected abstract QuestionsAdapterRowDataSet getAdapterDataSet(QuestionsAdapter adapter);
 }

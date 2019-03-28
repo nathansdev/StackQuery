@@ -21,4 +21,8 @@ public final class AppConstants {
     public static final String EXPIRES = "expires";
     public static final String ERROR = "error";
     public static final String KEY = "key";
+
+    public static final Integer SOCKET_TIME_OUT = 5001;
+    public static final Integer IO_EXCEPTION = 5002;
+    public static final Integer UNKNOWN = 5003;
 }

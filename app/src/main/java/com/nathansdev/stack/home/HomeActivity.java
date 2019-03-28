@@ -37,6 +37,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+/**
+ * MainActivity of StackQuery app.
+ */
 public class HomeActivity extends BaseActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private static final String FRAG_TAG_PROFILE = "profileFragment";
@@ -166,11 +169,13 @@ public class HomeActivity extends BaseActivity {
 
         });
         tableLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
     }
 
     private void setUpViews() {
         profileViewContainer.setVisibility(View.INVISIBLE);
         toolbar.inflateMenu(R.menu.menu_profile);
+//        toolbar.setNavigationIcon(R.drawable.ic_logo);
         toolbar.setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.action_profile) {
                 eventBus.send(new Pair<>(AppEvents.PROFILE_MENU_CLICKED, null));

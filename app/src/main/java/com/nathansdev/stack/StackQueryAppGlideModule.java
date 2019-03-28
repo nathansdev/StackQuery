@@ -4,7 +4,7 @@ import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
 
 /**
- * Glide module for vibe app.
+ * Glide module for StackQuery app.
  */
 @GlideModule
 public class StackQueryAppGlideModule extends AppGlideModule {

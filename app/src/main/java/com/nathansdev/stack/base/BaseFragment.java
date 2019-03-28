@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+
+import com.nathansdev.stack.R;
 
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
@@ -91,7 +94,12 @@ public abstract class BaseFragment extends Fragment implements MvpView {
 
     @Override
     public void onError(String message) {
-
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getBaseActivity())
+                .setTitle(R.string.error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                .setCancelable(true);
+        dialogBuilder.show();
     }
 
     @Override

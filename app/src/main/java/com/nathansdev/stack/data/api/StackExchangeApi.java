@@ -51,7 +51,7 @@ public interface StackExchangeApi {
                                                       @Query(PAGE_SIZE) String size);
 
     @GET(API_V1_USERS_QUESTIONS_JSON)
-    Flowable<QuestionsResponse> getUsersQuestionsFlowable(@Path(IDS) String ids, @Query(SORT) String sort, @Query(SITE) String site,
+    Flowable<QuestionsResponse> getUsersQuestionsFlowable(@Path(IDS) Long ids, @Query(SORT) String sort, @Query(SITE) String site,
                                                           @Query(ORDER) String order, @Query(PAGE) long page,
                                                           @Query(PAGE_SIZE) long size);
 

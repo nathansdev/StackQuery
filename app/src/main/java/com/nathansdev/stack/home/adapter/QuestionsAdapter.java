@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * A RecyclerView adapter with different view type to display questions and loading .
+ */
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionsAdapterVH> {
     private static final int VIEW_TYPE_QUESTION = 0x01;
     private static final int VIEW_TYPE_LOADMORE = 0x02;

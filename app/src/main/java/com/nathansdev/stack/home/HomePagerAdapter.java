@@ -2,8 +2,8 @@ package com.nathansdev.stack.home;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.nathansdev.stack.TaggedFragmentStatePagerAdapter;
 import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
@@ -13,9 +13,8 @@ import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
 /**
  * Pager adapter for home.
  */
-public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
+public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final String TAG = HomePagerAdapter.class.getSimpleName();
     private final FeaturedFeedFragment featuredFeedFragment;
     private final HotFeedFragment hotFeedFragment;
     private final ActivityFeedFragment interestingFeedFragment;
@@ -82,10 +81,5 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 5;
-    }
-
-    @Override
-    public String getTag(int position) {
-        return TAG + "." + names[position];
     }
 }

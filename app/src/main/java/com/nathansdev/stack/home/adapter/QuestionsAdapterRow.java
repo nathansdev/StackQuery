@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.nathansdev.stack.data.model.Question;
 
+/**
+ * A Builder class for recyclerview items  in QuestionsAdapter.
+ */
 @AutoValue
 public abstract class QuestionsAdapterRow implements Parcelable {
     private static final int TYPE_QUESTION = 0x01;

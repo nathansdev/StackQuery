@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Application preferences backed by shared preference.
+ * Application preferences backed by shared preference for stack query app.
  */
 public class AppPreferences {
     private static final String PREFS_NAME = "app-prefs";
     private static final String IS_LOGGEDIN = "isLoggedIn";
     private static final String ACCESS_TOKEN = "accessToken";
+    private static final String USER_ID = "userId";
     private final SharedPreferences prefs;
 
     public AppPreferences(Application app) {
@@ -33,11 +34,19 @@ public class AppPreferences {
         prefs.edit().putString(ACCESS_TOKEN, token).apply();
     }
 
+    public Long getUserId() {
+        return prefs.getLong(USER_ID, 0L);
+    }
+
+    public void setUserId(Long token) {
+        prefs.edit().putLong(USER_ID, token).apply();
+    }
+
     public SharedPreferences.Editor editor() {
         return prefs.edit();
     }
 
-    public void removeAccessToken() {
-        prefs.edit().remove(ACCESS_TOKEN).apply();
+    public void delete() {
+        prefs.edit().remove(USER_ID).remove(ACCESS_TOKEN).apply();
     }
 }
