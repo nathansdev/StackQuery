@@ -75,6 +75,7 @@ public class HomeActivity extends BaseActivity {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HomePagerAdapter homePagerAdapter;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +211,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void handleQuestionsTagClicked(String tag) {
-        Toast toast = Toast.makeText(this, tag, Toast.LENGTH_SHORT);
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(this, tag, Toast.LENGTH_SHORT);
 
         View view = toast.getView();
 

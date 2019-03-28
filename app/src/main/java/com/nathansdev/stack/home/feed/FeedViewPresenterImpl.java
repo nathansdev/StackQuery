@@ -21,6 +21,7 @@ import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
@@ -56,6 +57,13 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
                 .onBackpressureDrop()
                 .concatMap((Function<Long, Publisher<QuestionsResponse>>) page ->
                         getObservable())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Timber.e(throwable);
+                        removeLoading();
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriberCallbackWrapper<QuestionsResponse>(getMvpView()) {
 
@@ -76,8 +84,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     private void handleQuestionResponse(QuestionsResponse response) {
         Timber.d("handleQuestionResponse %s", response.hasMore());
-        rowDataSet.removeLoading();
-        rowDataSet.removeLoadMore();
+        removeLoading();
         List<QuestionsAdapterRow> rows = new ArrayList<>();
         if (response != null && response.questions() != null && !response.questions().isEmpty()) {
             for (Question question : response.questions()) {
@@ -90,6 +97,11 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
         Timber.d("questions rows size %s", rows.size());
         rowDataSet.addAllRows(rows);
         getMvpView().onQuestionsLoaded(rows);
+    }
+
+    private void removeLoading() {
+        rowDataSet.removeLoading();
+        rowDataSet.removeLoadMore();
     }
 
     @Override
