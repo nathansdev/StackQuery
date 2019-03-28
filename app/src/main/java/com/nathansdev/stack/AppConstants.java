@@ -7,7 +7,9 @@ public final class AppConstants {
     public static final String AUTH_URL = "https://stackoverflow.com/oauth/dialog";
     public static final String VOTES = "votes";
     public static final String ACTIVITY = "activity";
+    public static final String REPUTATION = "reputation";
     public static final String HOT = "hot";
+    public static final String MY_FEED = "myFeed";
     public static final String WEEK = "week";
     public static final String MONTH = "month";
     public static final String DESC = "desc";

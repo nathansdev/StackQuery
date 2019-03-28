@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
+    android:id="@+id/root"
     tools:context=".home.HomeActivity"
     android:layout_height="match_parent">
 
@@ -37,11 +38,11 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             android:minHeight="?actionBarSize"
             app:tabIndicatorColor="@color/orange"
             app:tabIndicatorHeight="4dp"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabTextAppearance="?android:attr/textAppearanceSmall"
             app:tabSelectedTextColor="@color/black"
             app:tabTextColor="@color/grey" />
@@ -52,4 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <FrameLayout
+        android:id="@+id/profile_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </android.support.design.widget.CoordinatorLayout>

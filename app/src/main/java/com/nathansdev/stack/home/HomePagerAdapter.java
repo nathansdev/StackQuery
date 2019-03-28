@@ -8,7 +8,6 @@ import com.nathansdev.stack.home.feed.ActivityFeedFragment;
 import com.nathansdev.stack.home.feed.FeaturedFeedFragment;
 import com.nathansdev.stack.home.feed.HotFeedFragment;
 import com.nathansdev.stack.home.feed.MonthLyFeedFragment;
-import com.nathansdev.stack.home.feed.SelfFragment;
 import com.nathansdev.stack.home.feed.WeekLyFeedFragment;
 
 /**
@@ -22,7 +21,6 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
     private final ActivityFeedFragment interestingFeedFragment;
     private final MonthLyFeedFragment monthLyFeedFragment;
     private final WeekLyFeedFragment weekLyFeedFragment;
-    private final SelfFragment selfFragment;
     private final String[] names;
 
     /**
@@ -34,19 +32,17 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
      * @param hotFeedFragment         alerts fragment instance.
      * @param monthLyFeedFragment     feed type monthly instance.
      * @param weekLyFeedFragment      feed type weekly instance.
-     * @param selfFragment            feed type self instance.
      */
     HomePagerAdapter(FragmentManager fm, ActivityFeedFragment interestingFeedFragment,
                      FeaturedFeedFragment featuredFeedFragment, HotFeedFragment hotFeedFragment,
                      MonthLyFeedFragment monthLyFeedFragment, WeekLyFeedFragment weekLyFeedFragment,
-                     SelfFragment selfFragment, String[] names) {
+                     String[] names) {
         super(fm);
         this.interestingFeedFragment = interestingFeedFragment;
         this.featuredFeedFragment = featuredFeedFragment;
         this.hotFeedFragment = hotFeedFragment;
         this.weekLyFeedFragment = weekLyFeedFragment;
         this.monthLyFeedFragment = monthLyFeedFragment;
-        this.selfFragment = selfFragment;
         this.names = names;
     }
 
@@ -62,8 +58,6 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
             return monthLyFeedFragment;
         } else if (position == 4) {
             return weekLyFeedFragment;
-        } else if (position == 5) {
-            return selfFragment;
         }
         return null;
     }
@@ -81,8 +75,6 @@ public class HomePagerAdapter extends TaggedFragmentStatePagerAdapter {
             title = names[3];
         } else if (position == 4) {
             title = names[4];
-        } else if (position == 5) {
-            title = names[5];
         }
         return title;
     }

@@ -25,7 +25,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+            app:srcCompat="@drawable/ic_profile_24dp" />
 
         <TextView
             android:id="@+id/tv_owner_name"

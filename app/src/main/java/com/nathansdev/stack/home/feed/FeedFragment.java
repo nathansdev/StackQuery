@@ -1,8 +1,6 @@
 package com.nathansdev.stack.home.feed;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.R;
 import com.nathansdev.stack.base.BaseFragment;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
@@ -27,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public abstract class FeedFragment extends BaseFragment implements FeedView,
+public abstract class FeedFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.feeds_recycler)
@@ -37,50 +34,30 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Inject
     RxEventBus eventBus;
-    @Inject
-    FeedViewPresenter<FeedView> presenter;
 
     private LinearLayoutManager layoutManager;
     private QuestionsAdapter adapter;
-    private QuestionsAdapterRowDataSet dataset;
-    private int lastVisibleItem;
-    private boolean loadingMore = false;
-    private String filterType = "activity";
-    private Handler handler = new Handler(Looper.getMainLooper());
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            filterType = getArguments().getString(AppConstants.ARG_FILTER_TYPE);
-        }
-    }
+    protected QuestionsAdapterRowDataSet dataset;
 
     private RecyclerView.OnScrollListener onScrollListener =
             new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                     if (lastVisibleItem > -1) {
                         QuestionsAdapterRow row = dataset.get(lastVisibleItem);
                         if (row.isTypeLoadMore()) {
-                            Timber.d("loadingMore %s", loadingMore);
-                            if (!loadingMore) {
-                                loadingMore = true;
                                 loadNextPage();
-                            }
                         }
                     }
                 }
             };
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         setViewUnbinder(ButterKnife.bind(this, rootView));
-        presenter.onAttach(this);
         attachPresenter();
         return rootView;
     }
@@ -92,7 +69,10 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Override
     protected void setUpView(View view) {
-        adapter = new QuestionsAdapter();
+        if (adapter != null) {
+            adapter.handleDestroy();
+        }
+        adapter = getAdapter();
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -107,8 +87,7 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
         adapter.setData(dataset);
         recyclerView.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(this);
-        presenter.init(dataset, filterType);
-        presenter.loadQuestions();
+        refreshLayout.setEnabled(false);
     }
 
     @Override
@@ -118,12 +97,10 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
 
     @Override
     public void hideLoading() {
-        loadingMore = !loadingMore;
     }
 
     @Override
     public void onRefresh() {
-        presenter.loadQuestions();
     }
 
     @Override
@@ -139,16 +116,11 @@ public abstract class FeedFragment extends BaseFragment implements FeedView,
         }
     }
 
-    private void loadNextPage() {
-        presenter.loadNextPage();
-    }
-
-    @Override
-    public void onQuestionsLoaded() {
-        loadingMore = !loadingMore;
-    }
-
     protected abstract void attachPresenter();
+
+    protected abstract void loadNextPage();
+
+    protected abstract void loadFeeds();
 
     protected abstract QuestionsAdapter getAdapter();
 }

@@ -13,4 +13,16 @@
     <dimen name="large_text">22sp</dimen>
     <dimen name="post_large_text">28sp</dimen>
     <dimen name="super_large_text">36sp</dimen>
+    <dimen name="avatar_height">48dp</dimen>
+    <dimen name="avatar_width">48dp</dimen>
+
+    <dimen name="profile_final_size">32dp</dimen>
+    <dimen name="spacingx_large">48dp</dimen>
+    <dimen name="spacingy_large">48dp</dimen>
+    <dimen name="spacingy_small">12dp</dimen>
+    <dimen name="spacingx_small">12dp</dimen>
+    <dimen name="spacing_small">12dp</dimen>
+    <dimen name="spacing_xsmall">8dp</dimen>
+    <dimen name="spacing_ysmall">8dp</dimen>
+    <dimen name="spacing_xxsmall">4dp</dimen>
 </resources>

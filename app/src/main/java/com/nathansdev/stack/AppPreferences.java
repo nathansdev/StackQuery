@@ -32,4 +32,12 @@ public class AppPreferences {
     public void setAccessToken(String token) {
         prefs.edit().putString(ACCESS_TOKEN, token).apply();
     }
+
+    public SharedPreferences.Editor editor() {
+        return prefs.edit();
+    }
+
+    public void removeAccessToken() {
+        prefs.edit().remove(ACCESS_TOKEN).apply();
+    }
 }

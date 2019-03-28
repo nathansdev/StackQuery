@@ -33,6 +33,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     private QuestionsAdapterRowDataSet rowDataSet;
     private String type;
     private long page = 1;
+    private boolean isLoading = false;
 
     @Inject
     FeedViewPresenterImpl(StackExchangeApi api) {
@@ -53,6 +54,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
                     @Override
                     protected void onNextAction(QuestionsResponse response) {
+                        isLoading = false;
                         getMvpView().hideLoading();
                         handleQuestionResponse(response);
                     }
@@ -67,32 +69,38 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     private void handleQuestionResponse(QuestionsResponse response) {
         Timber.d("handleQuestionResponse %s", response.hasMore());
-        rowDataSet.removeLoading();
-        rowDataSet.removeLoadMore();
+//        rowDataSet.removeLoading();
+//        rowDataSet.removeLoadMore();
         List<QuestionsAdapterRow> rows = new ArrayList<>();
         if (response != null && response.questions() != null && !response.questions().isEmpty()) {
             for (Question question : response.questions()) {
                 rows.add(QuestionsAdapterRow.ofQuestion(question));
             }
-            if (response.hasMore() != null && response.hasMore()) {
-                rows.add(QuestionsAdapterRow.ofLoadMore());
-            }
+//            if (response.hasMore() != null && response.hasMore()) {
+//                rows.add(QuestionsAdapterRow.ofLoadMore());
+//            }
         }
-        rowDataSet.addAllRows(rows);
-        getMvpView().onQuestionsLoaded();
+//        rowDataSet.addAllRows(rows);
+        getMvpView().onQuestionsLoaded(rows);
     }
 
     @Override
     public void loadQuestions() {
-        Timber.d("loadQuestions");
-        questionsSubject.onNext(0L);
+        Timber.d("loadQuestions %s %s", type, page);
+        if (!isLoading) {
+            isLoading = true;
+            questionsSubject.onNext(page);
+        }
     }
 
     @Override
     public void loadNextPage() {
-        Timber.d("loadNextPage");
-        page++;
-        questionsSubject.onNext(page);
+        Timber.d("loadNextPage %s %s", type, page);
+        if (!isLoading) {
+            isLoading = true;
+            page++;
+            questionsSubject.onNext(page);
+        }
     }
 
     @Override
@@ -101,7 +109,12 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     }
 
     private Flowable<QuestionsResponse> getObservable() {
-        return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 10)
-                .subscribeOn(Schedulers.io());
+        if (type.equalsIgnoreCase(AppConstants.MY_FEED)) {
+            return api.getUsersQuestionsFlowable("5361783", AppConstants.ACTIVITY, AppConstants.SITE, AppConstants.DESC, page, 10)
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return api.getQuestionsFlowable(type, AppConstants.SITE, AppConstants.DESC, page, 10)
+                    .subscribeOn(Schedulers.io());
+        }
     }
 }

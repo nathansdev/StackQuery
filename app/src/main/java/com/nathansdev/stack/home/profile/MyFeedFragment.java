@@ -1,4 +1,4 @@
-package com.nathansdev.stack.home.feed;
+package com.nathansdev.stack.home.profile;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,9 @@ import android.view.View;
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 import com.nathansdev.stack.home.adapter.QuestionsAdapterRow;
+import com.nathansdev.stack.home.feed.FeedFragment;
+import com.nathansdev.stack.home.feed.FeedView;
+import com.nathansdev.stack.home.feed.FeedViewPresenter;
 
 import java.util.List;
 
@@ -14,15 +17,24 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class HotFeedFragment extends FeedFragment implements FeedView {
+public class MyFeedFragment extends FeedFragment implements FeedView {
 
     @Inject
-    public HotFeedFragment() {
+    public MyFeedFragment() {
 
     }
 
     @Inject
     FeedViewPresenter<FeedView> presenter;
+
+    public static MyFeedFragment newInstance() {
+        MyFeedFragment fragment = new MyFeedFragment();
+        return fragment;
+    }
+
+    public void loadQuestions() {
+        presenter.loadQuestions();
+    }
 
     private String filterType = "activity";
 
@@ -38,18 +50,12 @@ public class HotFeedFragment extends FeedFragment implements FeedView {
     protected void setUpView(View view) {
         super.setUpView(view);
         presenter.init(dataset, filterType);
-        loadFeeds();
         Timber.d("setUpView");
     }
 
     @Override
     protected void loadNextPage() {
         presenter.loadNextPage();
-    }
-
-    @Override
-    protected void loadFeeds() {
-        presenter.loadQuestions();
     }
 
     @Override
@@ -60,6 +66,11 @@ public class HotFeedFragment extends FeedFragment implements FeedView {
     @Override
     protected QuestionsAdapter getAdapter() {
         return new QuestionsAdapter();
+    }
+
+    @Override
+    protected void loadFeeds() {
+        presenter.loadQuestions();
     }
 
     @Override
