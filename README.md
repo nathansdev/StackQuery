@@ -1,6 +1,6 @@
 # StackQuery
 
-Movify is an android application built using [StackExchange Api](https://api.stackexchange.com/docs) in MVP architecture.
+StackQuery is an android application built using [StackExchange Api](https://api.stackexchange.com/docs) in MVP architecture.
 
 ## Libraries Used
 
