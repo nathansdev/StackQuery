@@ -75,6 +75,10 @@ public class QuestionsAdapterRowDataSet extends SortedListAdapterCallback<Questi
         sortedList.clear();
     }
 
+    public void handleDestroy() {
+        sortedList.clear();
+    }
+
     /**
      * return the size of sorted list.
      *

@@ -7,6 +7,7 @@ import android.view.View;
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 import com.nathansdev.stack.home.adapter.QuestionsAdapterRow;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 import com.nathansdev.stack.home.feed.FeedFragment;
 import com.nathansdev.stack.home.feed.FeedView;
 import com.nathansdev.stack.home.feed.FeedViewPresenter;
@@ -48,9 +49,9 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
 
     @Override
     protected void setUpView(View view) {
-        super.setUpView(view);
-        presenter.init(dataset, filterType);
-        Timber.d("setUpView");
+//        super.setUpView(view);
+//        Timber.d("setUpView");
+//        presenter.init(dataset, filterType);
     }
 
     @Override
@@ -68,6 +69,12 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
         return new QuestionsAdapter();
     }
 
+
+    @Override
+    protected QuestionsAdapterRowDataSet getAdapterDataSet(QuestionsAdapter adapter) {
+        return QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
+    }
+
     @Override
     protected void loadFeeds() {
         presenter.loadQuestions();
@@ -75,7 +82,7 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
 
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
-
+        Timber.d("onQuestionsLoaded");
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.home.adapter.QuestionsAdapter;
 import com.nathansdev.stack.home.adapter.QuestionsAdapterRow;
+import com.nathansdev.stack.home.adapter.QuestionsAdapterRowDataSet;
 
 import java.util.List;
 
@@ -37,9 +38,9 @@ public class HotFeedFragment extends FeedFragment implements FeedView {
     @Override
     protected void setUpView(View view) {
         super.setUpView(view);
+        Timber.d("setUpView");
         presenter.init(dataset, filterType);
         loadFeeds();
-        Timber.d("setUpView");
     }
 
     @Override
@@ -62,9 +63,15 @@ public class HotFeedFragment extends FeedFragment implements FeedView {
         return new QuestionsAdapter();
     }
 
+
+    @Override
+    protected QuestionsAdapterRowDataSet getAdapterDataSet(QuestionsAdapter adapter) {
+        return QuestionsAdapterRowDataSet.createWithEmptyData(adapter);
+    }
+
     @Override
     public void onQuestionsLoaded(List<QuestionsAdapterRow> rows) {
-
+        Timber.d("onQuestionsLoaded");
     }
 
     @Override

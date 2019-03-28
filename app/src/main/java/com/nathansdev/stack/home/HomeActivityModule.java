@@ -4,7 +4,6 @@ package com.nathansdev.stack.home;
 import com.nathansdev.stack.common.CommonPresenter;
 import com.nathansdev.stack.common.CommonPresenterImpl;
 import com.nathansdev.stack.common.CommonView;
-import com.nathansdev.stack.di.PerActivity;
 import com.nathansdev.stack.di.PerChildFragment;
 import com.nathansdev.stack.di.PerFragment;
 import com.nathansdev.stack.home.feed.ActivityFeedFragment;
@@ -55,12 +54,10 @@ public abstract class HomeActivityModule {
     @ContributesAndroidInjector
     abstract MyFeedFragment provideMyFeedFragmentFactory();
 
-    @PerActivity
     @Binds
     abstract FeedViewPresenter<FeedView> provideFeedViewPresenter(FeedViewPresenterImpl<FeedView>
                                                                           feedViewPresenterImpl);
 
-    @PerActivity
     @Binds
     abstract CommonPresenter<CommonView> provideCommonPresenter(CommonPresenterImpl<CommonView>
                                                                         commonPresenterImpl);

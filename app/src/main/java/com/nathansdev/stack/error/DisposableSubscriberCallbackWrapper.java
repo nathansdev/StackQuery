@@ -1,6 +1,9 @@
 package com.nathansdev.stack.error;
 
+import android.util.Pair;
+
 import com.nathansdev.stack.base.MvpView;
+import com.nathansdev.stack.utils.ErrorUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -26,9 +29,11 @@ public abstract class DisposableSubscriberCallbackWrapper<T> extends DisposableS
     }
 
     @Override
-    public void onError(Throwable t) {
-        Timber.e(t);
+    public void onError(Throwable e) {
+        Timber.e(e);
         MvpView view = weakReference.get();
+        Pair<Integer, String> valuePair = ErrorUtils.errorMessage(e);
+        view.onError(valuePair.second);
     }
 
     @Override

@@ -166,6 +166,7 @@ public class HomeActivity extends BaseActivity {
 
         });
         tableLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
     }
 
     private void setUpViews() {

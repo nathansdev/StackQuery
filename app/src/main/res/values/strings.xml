@@ -11,6 +11,9 @@
     <string name="loading">loading…</string>
     <string name="image">Image</string>
     <string name="no_results">No Results</string>
+    <string name="error">Error!</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
 
     <string-array name="home_tabs">
         <item>Activity</item>

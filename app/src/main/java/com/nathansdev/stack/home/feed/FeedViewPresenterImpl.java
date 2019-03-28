@@ -31,6 +31,7 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
     private PublishProcessor<Long> questionsSubject = PublishProcessor.create();
     private CompositeDisposable disposables = new CompositeDisposable();
     private QuestionsAdapterRowDataSet rowDataSet;
+    private QuestionsAdapterRowDataSet second;
     private String type;
     private long page = 1;
     private boolean isLoading = false;
@@ -69,18 +70,19 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     private void handleQuestionResponse(QuestionsResponse response) {
         Timber.d("handleQuestionResponse %s", response.hasMore());
-//        rowDataSet.removeLoading();
-//        rowDataSet.removeLoadMore();
+        rowDataSet.removeLoading();
+        rowDataSet.removeLoadMore();
         List<QuestionsAdapterRow> rows = new ArrayList<>();
         if (response != null && response.questions() != null && !response.questions().isEmpty()) {
             for (Question question : response.questions()) {
                 rows.add(QuestionsAdapterRow.ofQuestion(question));
             }
-//            if (response.hasMore() != null && response.hasMore()) {
-//                rows.add(QuestionsAdapterRow.ofLoadMore());
-//            }
+            if (response.hasMore() != null && response.hasMore()) {
+                rows.add(QuestionsAdapterRow.ofLoadMore());
+            }
         }
-//        rowDataSet.addAllRows(rows);
+        Timber.d("questions rows size %s", rows.size());
+        rowDataSet.addAllRows(rows);
         getMvpView().onQuestionsLoaded(rows);
     }
 

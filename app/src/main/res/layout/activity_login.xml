@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".auth.LoginActivity">
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_auth"
         style="?android:textAppearanceButton"
         android:layout_width="wrap_content"
@@ -15,14 +15,14 @@
         android:background="@drawable/bg_grey_border_grey"
         android:text="@string/login_with_stackoverflow"
         android:padding="10dp"
-        android:textColor="@color/orange"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_skip_login"
         style="?android:textAppearanceButton"
         android:layout_width="wrap_content"
