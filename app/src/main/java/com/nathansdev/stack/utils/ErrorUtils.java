@@ -20,8 +20,7 @@ import timber.log.Timber;
  */
 public class ErrorUtils {
 
-
-    public static Pair<Integer, String> errorMessage(Throwable throwable) {
+    public static Pair<Integer, String> errorMessage(Throwable throwable, Moshi moshi) {
         Timber.e(throwable);
         String message = "Network failure";
         if (throwable instanceof HttpException) {
@@ -51,7 +50,7 @@ public class ErrorUtils {
                 default:
                     ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
                     try {
-                        message = parseErrorMessage(responseBody.string());
+                        message = parseErrorMessage(responseBody.string(), moshi);
                     } catch (IOException ex) {
                         Timber.e(ex);
                     }
@@ -69,15 +68,15 @@ public class ErrorUtils {
 
     /**
      * @param error error json.
+     * @param moshi
      * @return errorMessage.
      */
-    private static String parseErrorMessage(String error) {
+    private static String parseErrorMessage(String error, Moshi moshi) {
         Timber.d("Error message is %s", error);
         String errorMessage = "";
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<Error> jsonAdapter = moshi.adapter(Error.class);
         try {
             if (error != null) {
+                JsonAdapter<Error> jsonAdapter = moshi.adapter(Error.class);
                 Error errorResponse = jsonAdapter.fromJson(error);
                 //Timber.d("error %s",error);
                 errorMessage = errorResponse.message();
