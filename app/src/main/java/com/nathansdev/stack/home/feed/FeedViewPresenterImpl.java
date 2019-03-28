@@ -69,19 +69,19 @@ public class FeedViewPresenterImpl<V extends FeedView> extends BasePresenter<V> 
 
     private void handleQuestionResponse(QuestionsResponse response) {
         Timber.d("handleQuestionResponse %s", response.hasMore());
-        rowDataSet.removeLoading();
-        rowDataSet.removeLoadMore();
+//        rowDataSet.removeLoading();
+//        rowDataSet.removeLoadMore();
         List<QuestionsAdapterRow> rows = new ArrayList<>();
         if (response != null && response.questions() != null && !response.questions().isEmpty()) {
             for (Question question : response.questions()) {
                 rows.add(QuestionsAdapterRow.ofQuestion(question));
             }
-            if (response.hasMore() != null && response.hasMore()) {
-                rows.add(QuestionsAdapterRow.ofLoadMore());
-            }
+//            if (response.hasMore() != null && response.hasMore()) {
+//                rows.add(QuestionsAdapterRow.ofLoadMore());
+//            }
         }
-        rowDataSet.addAllRows(rows);
-        getMvpView().onQuestionsLoaded();
+//        rowDataSet.addAllRows(rows);
+        getMvpView().onQuestionsLoaded(rows);
     }
 
     @Override

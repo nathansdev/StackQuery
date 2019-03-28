@@ -87,6 +87,7 @@ public abstract class FeedFragment extends BaseFragment implements
         adapter.setData(dataset);
         recyclerView.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setEnabled(false);
     }
 
     @Override
