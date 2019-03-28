@@ -24,6 +24,18 @@ StackQuery is an android application built using [StackExchange Api](https://api
 - user profile with listing questions asked by logged in user.
 - login and logout using oauth with [StackExchange Api](https://api.stackexchange.com/docs).
 
+## Screenshots
+
+![One](https://github.com/nathansdev/StackQuery/blob/master/screenshots/device-2019-03-28-153906.png)
+
+![Two](https://github.com/nathansdev/StackQuery/blob/master/screenshots/device-2019-03-28-153929.png)
+
+![Three](https://github.com/nathansdev/StackQuery/blob/master/screenshots/device-2019-03-28-154004.png)
+
+![Four](https://github.com/nathansdev/StackQuery/blob/master/screenshots/device-2019-03-28-154042.png
+
+
+
 
 
 
