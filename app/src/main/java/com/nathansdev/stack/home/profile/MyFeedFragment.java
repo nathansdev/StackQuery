@@ -88,6 +88,12 @@ public class MyFeedFragment extends FeedFragment implements FeedView {
         adapter.notifyDataSetChanged();
     }
 
+    public void cleanUp() {
+        if (dataset != null) {
+            dataset.clearDataSet();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

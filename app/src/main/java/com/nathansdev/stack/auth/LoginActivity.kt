@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.CookieManager
+import android.webkit.CookieSyncManager
 import android.widget.Button
 import android.widget.ProgressBar
 import com.nathansdev.stack.AppConstants
@@ -42,12 +44,25 @@ class LoginActivity : BaseActivity() {
             showProgress()
         }
         buttonSkip?.setOnClickListener { routeToHome() }
-        Timber.d("onCreate")
+        checkLoggedOutIntent()
+    }
+
+    private fun checkLoggedOutIntent() {
+        val isJusLoggedOut = intent?.extras?.getBoolean(AppConstants.IS_JUST_LOGGED_OUT)
+        when (isJusLoggedOut) {
+            true -> clearCookies()
+        }
+    }
+
+    private fun clearCookies() {
+        Timber.d("clearCookies")
+        CookieSyncManager.createInstance(this)
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookie()
     }
 
     override fun onResume() {
         super.onResume()
-        Timber.d("onResume %s", intent)
         handleIntent()
     }
 

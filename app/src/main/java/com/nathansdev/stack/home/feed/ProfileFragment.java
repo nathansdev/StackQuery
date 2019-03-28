@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
 
 import com.nathansdev.stack.AppConstants;
 import com.nathansdev.stack.AppPreferences;
@@ -184,9 +183,11 @@ public class ProfileFragment extends BaseFragment implements HasSupportFragmentI
     public void onLoggedOut() {
         preferences.setIsLoggedIn(false);
         preferences.delete();
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeAllCookie();
         eventBus.send(new Pair<>(AppEvents.LOGOUT_COMPLETED, null));
+    }
+
+    public void cleanUp(){
+        myFeedFragment.cleanUp();
     }
 
     public void logOutUser() {

@@ -193,6 +193,7 @@ public class HomeActivity extends BaseActivity {
 
     private void handleLogOutCompleted() {
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(AppConstants.IS_JUST_LOGGED_OUT, true);
         startActivity(intent);
         finish();
     }
@@ -205,6 +206,7 @@ public class HomeActivity extends BaseActivity {
         if (profileViewContainer.getVisibility() == View.VISIBLE) {
             Utils.captureTransitionSlide(rootView);
             profileViewContainer.setVisibility(View.INVISIBLE);
+            getProfileFrag().cleanUp();
         } else {
             super.onBackPressed();
         }
